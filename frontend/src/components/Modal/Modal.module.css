@@ -1,0 +1,75 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: var(--z-overlay);
+  backdrop-filter: blur(3px);
+}
+.modalWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;    /* Vertical center */
+  justify-content: center; /* Horizontal center */
+  z-index: var(--z-modal);
+  padding: 20px;
+  pointer-events: none;    /* Allows clicks to pass through to backdrop */
+}
+.modal {
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;    /* Re-enable clicks for the actual modal */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  
+  /* Removed top/left/transform centering logic from here */
+}
+
+.sm { width: min(480px, 90vw); }
+.md { width: min(640px, 92vw); }
+.lg { width: min(860px, 95vw); }
+.xl { width: min(1100px, 97vw); }
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-soft);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-base);
+}
+
+.close:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}

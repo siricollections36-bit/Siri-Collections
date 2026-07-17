@@ -1,0 +1,32 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  color: #e8a87c;
+  line-height: 1;
+}
+
+.half {
+  opacity: 0.7;
+}
+
+.empty {
+  color: var(--color-border-dark);
+}
+
+.sm .star { font-size: 0.85rem; }
+.md .star { font-size: 1rem; }
+.lg .star { font-size: 1.2rem; }
+
+.count {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}

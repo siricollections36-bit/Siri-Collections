@@ -1,0 +1,235 @@
+.cartPage {
+  min-height: 100vh;
+  background-color: var(--color-bg-ivory);
+  padding: 60px 20px;
+}
+
+.title {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Cart Items Container */
+.cartItems {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cartItem {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px 150px 120px 40px;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--color-bg-white);
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.itemImage {
+  width: 80px;
+  height: 100px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Quantity Box UI */
+.qtyBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f9f9f9;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  width: fit-content;
+}
+
+.qtyBox button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.qtyBox button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qtyValueWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 45px;
+}
+
+.qty {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.limitReached {
+  color: #d32f2f;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Summary Sidebar */
+.summary {
+  position: sticky;
+  top: 100px;
+  background-color: var(--color-bg-white);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.summary h2 {
+  font-family: var(--font-serif);
+  margin-bottom: 25px;
+  color: var(--color-primary);
+}
+
+/* Price Breakdown */
+.priceBreakdown {
+  margin-bottom: 30px;
+}
+
+.breakdownRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #555;
+}
+
+.breakdownDivider {
+  height: 1px;
+  background: #eee;
+  margin: 15px 0;
+}
+
+.total {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.freeShipping {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+/* BUTTONS */
+.summaryActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkoutBtn {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.continueBtn {
+  width: 100%;
+  background-color: transparent;
+  color: var(--color-primary);
+  padding: 14px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkoutBtn:hover {
+  background-color: #033a1f;
+  transform: translateY(-2px);
+}
+
+.continueBtn:hover {
+  background-color: rgba(5, 71, 42, 0.05);
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.removeBtn:hover {
+  color: #d32f2f;
+}
+
+@media (max-width: 1024px) {
+  .container { grid-template-columns: 1fr; }
+  .summary { position: static; }
+}
+
+.qtyValueWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 40px; /* Fixed height keeps things aligned */
+}
+
+.qty {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.limitReached {
+  color: #d32f2f; /* Professional Alert Red */
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}

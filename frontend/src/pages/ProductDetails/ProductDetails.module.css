@@ -1,0 +1,123 @@
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+}
+
+/* GALLERY STYLES */
+.gallerySection {
+  display: flex;
+  gap: 15px;
+  height: 550px; /* CONSTRAINS HEIGHT: Prevents image being too big */
+}
+
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80px;
+  overflow-y: auto;
+}
+
+.thumbWrapper {
+  width: 70px;
+  height: 90px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.thumbWrapper img { width: 100%; height: 100%; object-fit: cover; }
+.activeThumb { border: 2px solid #1a4a34; }
+
+.mainImageDisplay {
+  flex: 1;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f9f9f9;
+}
+
+.mainImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Prevents cropping the saree borders */
+}
+
+/* INFO STYLES */
+.categoryBadge {
+  color: #1a4a34;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.title { font-size: 34px; margin: 10px 0; color: #333; }
+
+.priceRow { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+.price { font-size: 26px; font-weight: 700; color: #1a4a34; }
+.oldPrice { text-decoration: line-through; color: #aaa; font-size: 18px; }
+
+.divider { height: 1px; background: #eee; margin: 25px 0; }
+.description { line-height: 1.7; color: #555; margin-bottom: 20px; }
+
+.metaData p { margin: 10px 0; font-size: 15px; }
+.inStock { color: #2e7d32; font-weight: 600; margin-left: 5px; }
+.outOfStock { color: #d32f2f; font-weight: 600; margin-left: 5px; }
+
+/* ACTION ROW */
+.actionRow { display: flex; gap: 20px; margin-top: 30px; }
+
+.quantitySelector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.quantitySelector button {
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.addToCartBtn {
+  flex: 1;
+  background-color: #1a4a34;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addToCartBtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 850px) {
+  .mainGrid { grid-template-columns: 1fr; }
+  .gallerySection { flex-direction: column-reverse; height: auto; }
+  .thumbnails { flex-direction: row; width: 100%; }
+}

@@ -1,0 +1,221 @@
+.card {
+  background: var(--color-bg-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensures all cards in a row have equal height */
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px); /* Subtle lift on desktop */
+}
+
+.imageWrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4; /* Maintains saree portrait proportions */
+  display: block;
+  background-color: #f9f9f9;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.imageWrap:hover .image {
+  transform: scale(1.08);
+}
+
+/* --- BADGES --- */
+.discountBadge, .newBadge, .limitedBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+.discountBadge { background: #c0392b; color: #fff; }
+.newBadge { background: var(--color-primary); color: var(--color-text-ivory); }
+.limitedBadge { 
+  background: var(--color-gold); 
+  color: #fff; 
+  left: auto; 
+  right: 10px; 
+}
+
+/* --- WISHLIST BUTTON --- */
+.wishlistBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 3;
+}
+
+.wishlistBtn.wishlisted {
+  color: #e74c3c;
+}
+
+/* --- INFO AREA --- */
+.info {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.category {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits name to 2 lines for uniform card height */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.originalPrice {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* --- ADD TO CART BUTTON --- */
+.addBtn {
+  margin-top: auto; /* Pushes button to bottom of card */
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addBtn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.addBtn.inCart {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #2e7d32;
+}
+
+.addBtn:disabled {
+  border-color: #ccc;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* --- MOBILE RESPONSIVE OVERRIDES (Phone Fix) --- */
+@media (max-width: 768px) {
+  .info {
+    padding: 10px 12px;
+    gap: 4px;
+  }
+
+  .category {
+    font-size: 0.65rem;
+  }
+
+  .name {
+    font-size: 0.95rem; /* Smaller font for 2-column mobile grid */
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+
+  .originalPrice {
+    font-size: 0.8rem;
+  }
+
+  .addBtn {
+    padding: 10px 5px;
+    font-size: 0.75rem; /* Prevents text from breaking on small buttons */
+    letter-spacing: 0.5px;
+  }
+
+  .wishlistBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .discountBadge, .newBadge {
+    top: 8px;
+    left: 8px;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+  }
+}
+
+/* Extremely Small Phones */
+@media (max-width: 380px) {
+  .grid {
+    gap: 8px; /* Tighter gap for very small screens */
+  }
+  .addBtn {
+    font-size: 0.7rem;
+  }
+}

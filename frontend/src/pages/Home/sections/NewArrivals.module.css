@@ -1,0 +1,104 @@
+.section {
+  padding: 80px 0;
+  background-color: #fcfaf2; /* Soft ivory background for luxury feel */
+  overflow: hidden; /* Prevents the slider from causing page horizontal scroll */
+}
+
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* THE GOLD SUBTITLE */
+.subtitle {
+  color: #b38b59; /* Elegant gold bronze */
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+}
+
+/* THE SERIF TITLE */
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  color: #1a4a34; /* Dark brand green */
+  margin: 0;
+  font-weight: 500;
+}
+
+/* SIDE ARROWS STYLING */
+.arrows {
+  display: flex;
+  gap: 12px;
+}
+
+.arrowBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid #1a4a34;
+  background: white;
+  color: #1a4a34;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.arrowBtn:hover {
+  background-color: #1a4a34;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* THE SLIDER - THE FIX FOR IMAGE SIZE IS HERE */
+.sliderContainer {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto; /* Allows manual swipe on mobile */
+  scroll-behavior: smooth;
+  padding: 10px 5px 40px;
+  /* Hide standard scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sliderContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* CRITICAL: Constrain card width to prevent huge images */
+.cardWrapper {
+  min-width: 300px; 
+  max-width: 300px;
+  flex-shrink: 0; /* Prevents cards from squishing together */
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .title {
+    font-size: 32px;
+  }
+  .cardWrapper {
+    min-width: 270px;
+    max-width: 270px;
+  }
+}

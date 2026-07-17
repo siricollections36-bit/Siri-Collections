@@ -1,0 +1,301 @@
+/* 1. THEME VARIABLES */
+:root {
+  --color-primary: #05472A; /* Siri Green */
+  --color-bg-ivory: #FFFFF0;
+  --color-bg-white: #FFFFFF;
+  --color-gold: #DAA520;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Jost', sans-serif;
+  --color-border: #e0e0e0;
+}
+
+/* 2. PAGE LAYOUT */
+.container {
+  padding: 2rem;
+  background-color: var(--color-bg-ivory);
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* 3. TABS */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  padding: 0.7rem 1.2rem;
+  border: 1px solid var(--color-border);
+  background-color: white;
+  color: #666;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.activeTab {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* 4. TABLE STYLING */
+.tableWrapper {
+  background-color: var(--color-bg-white);
+  border-radius: 12px;
+  overflow-x: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px; /* Prevents jumbling */
+}
+
+.table th {
+  background-color: #f9f9f9;
+  padding: 1.2rem 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #eee;
+}
+
+.table td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+/* 5. TABLE CELLS */
+.customerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.custName { font-weight: 600; color: #333; }
+.custEmail { font-size: 0.8rem; color: #888; }
+
+.amount {
+  font-weight: 700;
+  color: var(--color-gold);
+  font-size: 1.1rem;
+}
+
+/* 6. STATUS BADGES */
+.statusBadge {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.processing { background: #fff4e5; color: #b36b00; }
+.delivered { background: #e8f5e9; color: #2e7d32; }
+.shipped { background: #e3f2fd; color: #1565c0; }
+
+/* 7. ACTION BUTTONS */
+.actionBtns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.viewBtn {
+  background: white;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.doneBtn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.deleteBtn {
+  background: none;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.deleteBtn:hover {
+  background: #d32f2f;
+  color: white;
+}
+
+/* 8. MODAL & INVOICE CONTENT */
+.modalContent {
+  padding: 10px;
+}
+
+.printableArea {
+  padding: 30px;
+  background: white;
+}
+
+.invoiceHeader {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.brandName { color: var(--color-primary); font-family: var(--font-serif); }
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.infoLabel {
+  font-size: 0.7rem;
+  color: #999;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.addressValue {
+  line-height: 1.5;
+  color: #444;
+  margin-top: 5px;
+}
+
+.itemTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.itemThumb {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.invoiceFooter {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  width: 250px;
+  margin-left: auto;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.grandTotal {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.printBtn {
+  background: var(--color-gold);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media print {
+  /* 1. Hide everything on the website */
+  body * {
+    display: none !important;
+  }
+
+  /* 2. Show only the invoice */
+  #printable-invoice, 
+  #printable-invoice * {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* 3. Force the invoice to the top-left of the physical paper */
+  #printable-invoice {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* 4. Ensure images print clearly */
+  .itemThumb {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 4. Ensure table borders and images show up clearly */
+  .itemTable {
+    border: 1px solid #eee !important;
+  }
+  
+  .itemThumb {
+    width: 60px !important;
+    height: 80px !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Hide the action buttons (Print/Close) on the actual paper */
+  .modalActions {
+    display: none !important;
+  }
+}
+
+/* Color for the new status */
+.dispatched {
+  background-color: #e3f2fd; /* Light Blue */
+  color: #0d47a1; /* Dark Blue */
+  border: 1px solid #bbdefb;
+}
+
+/* Ensure the Badge stays consistent */
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}

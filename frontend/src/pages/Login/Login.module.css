@@ -1,0 +1,207 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fcfaf2; /* Soft cream background */
+  font-family: 'Playfair Display', serif; /* Or your chosen elegant font */
+}
+
+/* LEFT SIDE: HERO SECTION */
+.heroSection {
+  flex: 1.2;
+  position: relative;
+  background-image: url('https://images.pexels.com/photos/28943543/pexels-photo-28943543.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-size: cover;
+  background-position: center;
+  display: none; /* Hidden on mobile */
+}
+
+@media (min-width: 1024px) {
+  .heroSection {
+    display: block;
+  }
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(26, 74, 52, 0.4), rgba(26, 74, 52, 0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.heroContent {
+  text-align: center;
+  color: #ffffff;
+}
+
+.logoBadge {
+  width: 80px;
+  height: 80px;
+  background-color: #ffffff;
+  color: #1a4a34; /* Your brand green */
+  font-size: 40px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.heroTitle {
+  font-size: 48px;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+.heroSubtitle {
+  font-size: 18px;
+  opacity: 0.9;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+/* RIGHT SIDE: FORM SECTION */
+.formSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 420px;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 36px;
+  color: #1a4a34;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a4a34;
+  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+}
+
+.input {
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1a4a34;
+  box-shadow: 0 0 0 4px rgba(26, 74, 52, 0.1);
+}
+
+.formOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #555;
+}
+
+.forgotPass {
+  color: #1a4a34;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.loginBtn {
+  background-color: #1a4a34;
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+.loginBtn:hover {
+  background-color: #143827;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(26, 74, 52, 0.3);
+}
+
+.loginBtn:disabled {
+  background-color: #a0b2a9;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.footerText {
+  text-align: center;
+  margin-top: 32px;
+  color: #666;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.link {
+  color: #1a4a34;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Animations */
+.formWrapper {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

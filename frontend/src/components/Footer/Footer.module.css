@@ -1,0 +1,115 @@
+.footer {
+  background-color: #052416; /* Deep Siri Green */
+  color: #fcfaf2; /* Ivory Text */
+  padding: 0;
+  font-family: 'Jost', sans-serif;
+}
+
+/* FIX: Follow Us on Instagram Styling */
+.instaSection {
+  background-color: rgba(255, 255, 240, 0.05); /* Very subtle ivory tint */
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(218, 165, 32, 0.2); /* Subtle Gold border */
+}
+
+.instaLink {
+  color: #DAA520; /* Gold text */
+  text-decoration: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+}
+
+.instaLink:hover {
+  opacity: 0.8;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px 30px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 60px;
+}
+
+/* LOGO FIX */
+.logo {
+  height: 60px;
+  width: auto;
+  margin-bottom: 10px;
+  /* Since your logo has a white background in the file, 
+     we keep it clean or use a filter if you want it to be gold-ish */
+}
+
+.brandName {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: #fcfaf2;
+  margin: 0 0 15px;
+}
+
+.brandDesc {
+  color: #a0b2a9;
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+.colTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: #DAA520; /* Gold headers */
+  margin-bottom: 25px;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footerLink {
+  color: #fcfaf2;
+  text-decoration: none;
+  font-weight: 300;
+  transition: color 0.2s;
+}
+
+.footerLink:hover {
+  color: #DAA520;
+}
+
+/* PAYMENT SPACING FIX */
+.bottom {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.payIcons {
+  display: inline-flex;
+  gap: 15px;
+  margin-left: 10px;
+}
+
+.chip {
+  color: #fcfaf2;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; gap: 40px; }
+  .bottom { flex-direction: column; gap: 20px; text-align: center; }
+}

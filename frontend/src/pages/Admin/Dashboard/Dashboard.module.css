@@ -1,0 +1,156 @@
+.container {
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.header {
+  margin-bottom: 30px;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  color: #1a4a34;
+  font-size: 2.2rem;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* STATS GRID */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.statCard {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.iconBox {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.ordersIcon { background: #e8f5e9; }
+.customersIcon { background: #e3f2fd; }
+.productsIcon { background: #fff3e0; }
+
+.statLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.statNumber {
+  font-size: 2rem;
+  color: #1a4a34;
+  margin: 0;
+  font-weight: 800;
+}
+
+/* TABLE STYLING */
+.recentSection {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.sectionTitle {
+  font-family: 'Playfair Display', serif;
+  color: #1a4a34;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Prevents jumbling on smaller screens */
+}
+
+.table th {
+  text-align: left;
+  padding: 15px;
+  border-bottom: 2px solid #f5f5f5;
+  color: #1a4a34;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.table td {
+  padding: 18px 15px;
+  border-bottom: 1px solid #f9f9f9;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.idCell {
+  font-weight: 700;
+  color: #1a4a34;
+}
+
+.customerEmail {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.amountCell {
+  font-weight: 600;
+}
+
+/* STATUS BADGES */
+.statusBadge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.processing { background: #fff4e5; color: #b36b00; }
+.shipped { background: #e3f2fd; color: #1565c0; }
+.delivered { background: #e8f5e9; color: #2e7d32; }
+.cancelled { background: #ffebee; color: #c62828; }
+
+.noData {
+  text-align: center;
+  padding: 50px !important;
+  color: #aaa;
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

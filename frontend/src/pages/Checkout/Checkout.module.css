@@ -1,0 +1,129 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--color-bg-ivory);
+  padding: 40px 20px;
+}
+
+.checkoutHeader {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.pageTitle {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--color-primary);
+}
+
+.secureNote {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.mainGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.sectionCard {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--color-primary);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.formGroup { margin-bottom: 15px; }
+.label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; text-transform: uppercase; color: #888; }
+.input { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 6px; font-size: 0.95rem; transition: 0.3s; }
+.input:focus { border-color: var(--color-primary); outline: none; }
+
+.paymentBox {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f0f7f4;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+}
+
+.summaryColumn {
+  position: sticky;
+  top: 100px;
+}
+
+.summaryCard {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.summaryItem {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.itemThumb {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.itemDetails { flex: 1; }
+.itemName { font-size: 0.9rem; font-weight: 600; margin: 0; }
+.itemQty { font-size: 0.75rem; color: #888; }
+.itemPrice { font-weight: 700; color: var(--color-primary); }
+
+.divider { height: 1px; background: #eee; margin: 15px 0; }
+.calcRow { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+.freeText { color: #27ae60; font-weight: 700; }
+.grandTotal { font-size: 1.3rem; font-weight: 800; color: var(--color-gold); margin-top: 10px; }
+
+.payBtn {
+  background: #27ae60;
+  color: white;
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+.payBtn:hover { background: #219150; transform: translateY(-2px); }
+
+.trustTag { font-size: 0.75rem; text-align: center; color: #999; margin-top: 15px; }
+
+/* Modal Styles... (keep from previous modal code) */
+
+@media (max-width: 900px) {
+  .mainGrid { grid-template-columns: 1fr; }
+  .summaryColumn { position: static; }
+}

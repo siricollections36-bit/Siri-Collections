@@ -1,0 +1,235 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-bg-ivory) 0%, var(--color-bg-soft) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(5,71,42,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+}
+
+/* 404 Number */
+.notFoundNumber {
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-family: var(--font-serif);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-6);
+  line-height: 1;
+}
+
+/* Heading */
+.heading {
+  font-size: 2.5rem;
+  font-family: var(--font-serif);
+  color: var(--color-text-dark);
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Description */
+.description {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+/* Buttons */
+.buttonGroup {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-smooth);
+  display: inline-block;
+  box-shadow: var(--shadow-sm);
+}
+
+.primaryBtn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-text-ivory);
+}
+
+.primaryBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-primary);
+}
+
+.primaryBtn:active {
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  background: var(--color-bg-white);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.secondaryBtn:hover {
+  background: var(--color-primary-muted);
+  transform: translateY(-3px);
+}
+
+.secondaryBtn:active {
+  transform: translateY(-1px);
+}
+
+/* Decorative Floating Element */
+.decoration {
+  position: absolute;
+  top: 80px;
+  right: 60px;
+  font-size: 3rem;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+/* Decorative Squares */
+.decorativeSquare1,
+.decorativeSquare2 {
+  position: absolute;
+  border: 2px solid var(--color-primary);
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.decorativeSquare1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+  border-radius: var(--radius-lg);
+}
+
+.decorativeSquare2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+  border-radius: var(--radius-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    max-width: 100%;
+    padding: 0 var(--space-3);
+  }
+
+  .notFoundNumber {
+    font-size: clamp(2.5rem, 12vw, 6rem);
+    margin-bottom: var(--space-4);
+  }
+
+  .heading {
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .description {
+    font-size: 1rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .buttonGroup {
+    gap: var(--space-3);
+    flex-direction: column;
+  }
+
+  .primaryBtn,
+  .secondaryBtn {
+    width: 100%;
+    padding: 12px 24px;
+  }
+
+  .decoration {
+    top: 40px;
+    right: 30px;
+    font-size: 2rem;
+  }
+
+  .decorativeSquare1 {
+    width: 200px;
+    height: 200px;
+    top: -50px;
+    left: -50px;
+  }
+
+  .decorativeSquare2 {
+    width: 150px;
+    height: 150px;
+    bottom: -30px;
+    right: -30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-2);
+  }
+
+  .notFoundNumber {
+    font-size: clamp(2rem, 10vw, 4rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    margin-bottom: var(--space-4);
+  }
+
+  .primaryBtn,
+  .secondaryBtn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+
+  .decoration {
+    display: none;
+  }
+
+  .decorativeSquare1,
+  .decorativeSquare2 {
+    display: none;
+  }
+}

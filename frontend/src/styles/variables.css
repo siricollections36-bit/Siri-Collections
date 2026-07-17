@@ -1,0 +1,93 @@
+:root {
+  /* Brand Colors */
+  --color-primary: #05472A;
+  --color-primary-dark: #033a22;
+  --color-primary-light: #0a6b40;
+  --color-primary-muted: rgba(5, 71, 42, 0.08);
+
+  /* Background */
+  --color-bg-ivory: #FFFFE3;
+  --color-bg-white: #FFFFFF;
+  --color-bg-soft: #F9F8F0;
+  --color-bg-dark: #0a1f14;
+
+  /* Text */
+  --color-text-dark: #222222;
+  --color-text-muted: #666666;
+  --color-text-light: #999999;
+  --color-text-white: #FFFFFF;
+  --color-text-ivory: #FFFFE3;
+
+  /* Borders */
+  --color-border: #E9E5D5;
+  --color-border-dark: #c8c2ae;
+
+  /* Accent / Gold */
+  --color-gold: #b8952a;
+  --color-gold-light: #d4af6a;
+  --color-gold-pale: rgba(184, 149, 42, 0.15);
+
+  /* Status */
+  --color-success: #1a7a4a;
+  --color-warning: #c47b0a;
+  --color-error: #c0392b;
+  --color-info: #2980b9;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.18);
+  --shadow-primary: 0 8px 24px rgba(5, 71, 42, 0.25);
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-index */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+:root {
+  /* Add these if they are missing */
+  --z-overlay: 1000;
+  --z-modal: 1001;
+  --radius-lg: 12px;
+  --color-bg-white: #ffffff;
+  --color-bg-soft: #f8f9fa;
+  --color-text-muted: #6c757d;
+  --transition-base: 0.2s ease-in-out;
+}
+
+  /* Navbar */
+  --navbar-height: 72px;
+}

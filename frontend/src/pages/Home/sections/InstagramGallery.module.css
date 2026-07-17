@@ -1,0 +1,174 @@
+:root {
+  --color-primary: #05472A;
+  --color-bg-ivory: #FFFFE3;
+  --color-gold: #b8952a;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Jost', sans-serif;
+}
+
+.section {
+  width: 100%;
+  background-color: #fff;
+  padding: 80px 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 48px;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.handle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-gold);
+  letter-spacing: 2px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Updated Container for a Complete View */
+.singleImageContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.featuredLink {
+  display: block;
+  width: 100%;
+  max-width: 700px; /* Increased width for a better rectangle view */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #000; /* Black background for the frame */
+}
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  /* Removed aspect-ratio to let the image dictate the shape */
+}
+
+.featuredImage {
+  width: 100%;
+  height: auto; /* Allows the full height of the image to show */
+  object-fit: contain; /* Ensures nothing is cut off */
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.featuredLink:hover .featuredImage {
+  transform: scale(1.03); /* Subtle zoom so it doesn't blur */
+}
+
+/* Hover Overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(5, 71, 42, 0.5); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.featuredLink:hover .overlay {
+  opacity: 1;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.instagramIcon {
+  width: 44px;
+  height: 44px;
+  color: white;
+}
+
+.overlayText {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* Button Styling */
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.followButton {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--color-primary);
+  padding: 16px 45px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.followButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: var(--color-gold);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.followButton:hover::before {
+  width: 450px;
+  height: 450px;
+}
+
+.followButton:hover {
+  color: white; /* Kept text white for readability against gold */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .featuredLink { max-width: 95%; }
+  .title { font-size: 32px; }
+  .section { padding: 50px 0; }
+}
