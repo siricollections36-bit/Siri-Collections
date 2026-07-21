@@ -55,9 +55,9 @@ export default function Shop() {
         maxPrice: maxPriceParam
       };
       
-      if (searchQuery) params.append('search', searchQuery.trim());
-      if (categoryParam) params.append('category', categoryParam);
-      if (fabricParam) params.append('fabric', fabricParam);
+     if (searchQuery) queryParams.search = searchQuery.trim();
+if (categoryParam) queryParams.category = categoryParam;
+if (fabricParam) queryParams.fabric = fabricParam;
 
       const res = await api.get('/products', { params: queryParams });
       
