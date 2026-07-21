@@ -121,7 +121,7 @@ const { addToCart, items, updateQuantity, isInCart } = useCart();
             </button>
           )}
         </div>
-      
+      </div>
     </motion.div>
   );
 }
