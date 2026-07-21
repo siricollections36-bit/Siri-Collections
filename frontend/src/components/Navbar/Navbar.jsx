@@ -7,6 +7,7 @@ import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import styles from './Navbar.module.css';
+import logo from '../../assets/logos/logo.png';
 
 <img src={logo} alt="Siri Collections" />
 
