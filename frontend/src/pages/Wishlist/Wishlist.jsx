@@ -27,7 +27,7 @@ export default function Wishlist() {
 
   const handleRemove = (product) => {
     toggleWishlist(product);
-    show('Removed from your heart list', 'info');
+    show('Removed from your wish list', 'info');
   };
 
   // Animation variants for individual items
@@ -63,7 +63,7 @@ export default function Wishlist() {
               animate={{ opacity: 1 }}
             >
               <div className={styles.emptyIcon}>♡</div>
-              <h2>Your heart list is empty</h2>
+              <h2>Your wish list is empty</h2>
               <p>Sign in to sync your wishlist across all your devices.</p>
               <button onClick={() => navigate('/shop')} className={styles.shopNowBtn}>
                 Discover Sarees
