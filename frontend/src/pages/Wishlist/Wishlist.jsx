@@ -13,24 +13,11 @@ export default function Wishlist() {
   const { show } = useToast();
   const navigate = useNavigate();
 
-  const handleMoveToCart = (product) => {
-    const productId = product._id || product.id;
-    addToCart({
-      ...product,
-      id: productId,
-      quantity: 1,
-    });
-    // Remove from wishlist after moving to cart
-    toggleWishlist(product);
-    show(`${product.name} moved to cart`, 'success');
-  };
-
   const handleRemove = (product) => {
     toggleWishlist(product);
     show('Removed from your wish list', 'info');
   };
 
-  // Animation variants for individual items
   const itemVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -70,35 +57,34 @@ export default function Wishlist() {
               </button>
             </motion.div>
           ) : (
-            /* 3. RESPONSIVE GRID */
-            {/* 3. RESPONSIVE GRID */}
-<div className={styles.wishlistGrid}>
-  {wishlistItems.map((product) => (
-    <motion.div
-      key={product._id || product.id}
-      className={styles.wishlistItem}
-      variants={itemVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      layout
-    >
-      {/* Just the standard Product Card */}
-      <div className={styles.productWrapper}>
-        <ProductCard product={product} />
-      </div>
+            /* 3. RESPONSIVE GRID - FIXED SYNTAX HERE */
+            <div className={styles.wishlistGrid}>
+              {wishlistItems.map((product) => (
+                <motion.div
+                  key={product._id || product.id}
+                  className={styles.wishlistItem}
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  layout
+                >
+                  {/* Just the standard Product Card */}
+                  <div className={styles.productWrapper}>
+                    <ProductCard product={product} />
+                  </div>
 
-      {/* Only the REMOVE BUTTON (No overlays or Move buttons) */}
-      <button
-        className={styles.removeBtn}
-        onClick={() => handleRemove(product)}
-        aria-label="Remove from wishlist"
-      >
-        ✕
-      </button>
-    </motion.div>
-  ))}
-</div>
+                  {/* Only the REMOVE BUTTON */}
+                  <button
+                    className={styles.removeBtn}
+                    onClick={() => handleRemove(product)}
+                    aria-label="Remove from wishlist"
+                  >
+                    ✕
+                  </button>
+                </motion.div>
+              ))}
+            </div>
           )}
         </AnimatePresence>
 
