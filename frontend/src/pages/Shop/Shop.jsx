@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api'; 
 import ProductCard from '../../components/ProductCard/ProductCard.jsx';
 import FilterSidebar from '../../components/FilterSidebar/FilterSidebar.jsx';
 import Loader from '../../components/Loader/Loader.jsx';
@@ -16,11 +16,14 @@ const SORT_OPTIONS = [
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({ total: 0, pages: 1 });
 
-  // 1. EXTRACT ALL FILTERS DIRECTLY FROM URL (Source of Truth)
   const categoryParam = searchParams.get('category') || '';
   const fabricParam = searchParams.get('fabric') || '';
   const maxPriceParam = Number(searchParams.get('maxPrice')) || 25000;
@@ -28,32 +31,35 @@ export default function Shop() {
   const pageParam = Number(searchParams.get('page')) || 1;
   const searchQuery = searchParams.get('search') || '';
 
-  // Construct a filters object to pass to the Sidebar UI
   const currentFilters = {
     category: categoryParam ? categoryParam.split(',') : [],
     fabric: fabricParam ? fabricParam.split(',') : [],
     maxPrice: maxPriceParam
   };
 
-  /**
-   * 2. DATA FETCHING LOGIC
-   * This is now fully scalable. It only re-runs when the URL parameters change.
-   */
+  const handleSmartBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
+      const queryParams = {
+        page: pageParam,
+        limit: 8,
+        sort: sortParam,
+        maxPrice: maxPriceParam
+      };
       
-      const params = new URLSearchParams();
-      params.append('page', pageParam);
-      params.append('limit', 12);
-      params.append('sort', sortParam);
-      params.append('maxPrice', maxPriceParam);
-      
-      if (searchQuery) params.append('search', searchQuery);
+      if (searchQuery) params.append('search', searchQuery.trim());
       if (categoryParam) params.append('category', categoryParam);
       if (fabricParam) params.append('fabric', fabricParam);
 
-      const res = await axios.get(`http://localhost:5000/api/products?${params.toString()}`);
+      const res = await api.get('/products', { params: queryParams });
       
       setProducts(res.data.products || []);
       setPagination({
@@ -61,7 +67,7 @@ export default function Shop() {
         pages: res.data.totalPages || 1
       });
     } catch (err) {
-      console.error("Fetch Error: Backend might be down.");
+      console.error("API Fetch Error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -71,10 +77,6 @@ export default function Shop() {
     fetchProducts();
   }, [fetchProducts]);
 
-  /**
-   * 3. HANDLERS
-   * These update the URL, which automatically triggers a re-render and a re-fetch.
-   */
   const handleFilterChange = (newFilters) => {
     const nextParams = new URLSearchParams(searchParams);
     
@@ -85,7 +87,7 @@ export default function Shop() {
     else nextParams.delete('fabric');
 
     nextParams.set('maxPrice', newFilters.maxPrice);
-    nextParams.set('page', '1'); // Reset to first page when filtering
+    nextParams.set('page', '1'); 
     setSearchParams(nextParams);
   };
 
@@ -98,16 +100,27 @@ export default function Shop() {
   };
 
   const handleClearFilters = () => {
-    setSearchParams({}); // Wipes everything from the URL
+    setSearchParams({});
+    setIsFilterOpen(false);
   };
 
   return (
-    <motion.div className={styles.page} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <div className={styles.page}>
       <div className={styles.pageHero}>
         <div className={styles.heroInner}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Home</Link> <span>›</span> <span>Shop</span>
-          </nav>
+          <div className={styles.topNavigation}>
+            <button className={styles.backBtn} onClick={handleSmartBack}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              Back
+            </button>
+            <nav className={styles.breadcrumb}>
+              <Link to="/">Home</Link> <span>›</span> <span>Shop</span>
+            </nav>
+          </div>
+
           <h1 className={styles.pageTitle}>
             {categoryParam && !categoryParam.includes(',') ? categoryParam : (searchQuery ? `Results for "${searchQuery}"` : 'Our Collection')}
           </h1>
@@ -116,24 +129,51 @@ export default function Shop() {
       </div>
 
       <div className={styles.layout}>
-        <aside className={styles.sidebar}>
-          <FilterSidebar 
-            filters={currentFilters} 
-            onChange={handleFilterChange} 
-            onClear={handleClearFilters} 
-          />
+        <aside className={`${styles.sidebar} ${isFilterOpen ? styles.active : ''}`}>
+          <div className={styles.backdrop} onClick={() => setIsFilterOpen(false)} />
+          <div className={styles.drawerContent}>
+             <div className={styles.drawerHeader}>
+                <h3>Filters</h3>
+                <button className={styles.closeBtn} onClick={() => setIsFilterOpen(false)}>✕</button>
+             </div>
+             <FilterSidebar 
+                filters={currentFilters} 
+                onChange={handleFilterChange} 
+                onClear={handleClearFilters} 
+              />
+              <button className={styles.applyBtn} onClick={() => setIsFilterOpen(false)}>
+                See Results
+              </button>
+          </div>
         </aside>
 
-        <div className={styles.main}>
+        <main className={styles.main}>
           <div className={styles.toolbar}>
-            <div className={styles.searchContainer}>
-               <div className={styles.searchWrapper}>
-                  <svg className={styles.searchIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className={styles.mobileActions}>
+                <button className={styles.filterToggle} onClick={() => setIsFilterOpen(true)}>
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+                   FILTER
+                </button>
+                <div className={styles.vDivider} />
+                <div className={styles.mobileSort}>
+                  <select 
+                    value={sortParam} 
+                    onChange={(e) => setSearchParams(prev => { prev.set('sort', e.target.value); return prev; })}
+                    className={styles.sortSelect}
+                  >
+                    {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                </div>
+            </div>
+
+            <div className={styles.searchWrapper}>
+               <div className={styles.searchInner}>
+                  <svg className={styles.searchIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                   </svg>
                   <input
                     type="text"
-                    placeholder="Search sarees..."
+                    placeholder="Search name or unique code (e.g. ST-101)..."
                     className={styles.searchInput}
                     value={searchQuery}
                     onChange={(e) => {
@@ -142,21 +182,10 @@ export default function Shop() {
                         if (val) prev.set('search', val); else prev.delete('search');
                         prev.set('page', '1');
                         return prev;
-                      }, { replace: true }); // replace: true prevents flooding browser history
+                      }, { replace: true });
                     }}
                   />
                </div>
-            </div>
-
-            <div className={styles.sortWrap}>
-              <label className={styles.sortLabel}>Sort By:</label>
-              <select 
-                value={sortParam} 
-                onChange={(e) => setSearchParams(prev => { prev.set('sort', e.target.value); return prev; })} 
-                className={styles.sortSelect}
-              >
-                {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
             </div>
           </div>
 
@@ -189,12 +218,11 @@ export default function Shop() {
           ) : (
             <div className={styles.empty}>
               <h3>No products found</h3>
-              <p>Try adjusting your filters or search terms.</p>
               <button onClick={handleClearFilters} className={styles.emptyBtn}>Clear All Filters</button>
             </div>
           )}
-        </div>
+        </main>
       </div>
-    </motion.div>
+    </div>
   );
 }

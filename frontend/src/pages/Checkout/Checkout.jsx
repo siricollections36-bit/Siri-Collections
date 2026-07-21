@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import { useCart } from '../../context/CartContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
@@ -57,7 +57,7 @@ export default function Checkout() {
     setShippingData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePayNow = async () => {
+ const handlePayNow = async () => {
     const { name, email, phone, address, city, state, pincode } = shippingData;
     
     if (!name || !email || !phone || !address || !city || !state || !pincode) {
@@ -75,9 +75,8 @@ export default function Checkout() {
     }
 
     try {
-      const backendUrl = 'http://localhost:5000';
+      // 1. REMOVED: const backendUrl = 'http://localhost:5000';
       
-      // Capture current cart state before calling the API
       const checkoutSnapshot = {
         items: [...items],
         subtotal: cartSubtotal,
@@ -85,7 +84,8 @@ export default function Checkout() {
         total: cartTotal
       };
 
-      const { data: orderData } = await axios.post(`${backendUrl}/api/orders/create`, {
+      // 2. CHANGED: Using api.post and relative path '/orders/create'
+      const { data: orderData } = await api.post('/orders/create', {
         amount: cartTotal, 
         shippingData,
         userId: user?._id || user?.id || null,
@@ -104,35 +104,43 @@ export default function Checkout() {
         currency: "INR",
         name: "Siri Collections",
         description: `Order #${orderData.orderNumber}`,
-        image: "/logo.png",
+        image: "",
         order_id: orderData.razorpayOrderId, 
         handler: async function (response) {
-  try {
-    const verifyRes = await axios.post(`${backendUrl}/api/orders/verify`, {
-      razorpay_order_id: response.razorpay_order_id,
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature,
-    });
+          try {
+            // 3. CHANGED: Using api.post and relative path '/orders/verify'
+            const verifyRes = await api.post('/orders/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
 
-    if (verifyRes.data.success) {
-      clearCart(); // Clear the context
-      setIsProcessing(false);
-      
-      // THE REDIRECT: Go to the fresh page and pass the email
-      navigate(`/order-success/${orderData.orderNumber}`, { 
-        state: { email: shippingData.email } 
-      });
-    }
-  } catch (err) {
-    show("Payment verification failed", "error");
-    setIsProcessing(false);
-  }
-},
-        prefill: { name, email, contact: phone },
+            if (verifyRes.data.success) {
+              clearCart(); 
+              setIsProcessing(false);
+              navigate(`/order-success/${orderData.orderNumber}`, { 
+                state: { email: shippingData.email } 
+              });
+            }
+          } catch (err) {
+            show("Payment verification failed", "error");
+            setIsProcessing(false);
+          }
+        },
+        prefill: {  name: shippingData.name,
+    email: shippingData.email,
+    contact: shippingData.phone },
         theme: { color: "#1a4a34" },
         modal: { ondismiss: () => setIsProcessing(false) }
       };
+console.log("DEBUGGING RAZORPAY PAYLOAD:");
+console.log("Key:", import.meta.env.VITE_RAZORPAY_KEY_ID);
+console.log("Order ID:", orderData.razorpayOrderId);
+console.log("Amount (in paise):", orderData.amount);
 
+if (!orderData.razorpayOrderId) {
+    alert("CRITICAL ERROR: Backend did not return a Razorpay Order ID!");
+}
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
 

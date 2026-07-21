@@ -31,7 +31,6 @@ const OrderDetails = lazy(() => import('./pages/OrderDetails/OrderDetails.jsx'))
 const Dashboard = lazy(() => import('./pages/Admin/Dashboard/Dashboard.jsx'));
 const AdminProducts = lazy(() => import('./pages/Admin/Products/AdminProducts.jsx'));
 const AdminOrders = lazy(() => import('./pages/Admin/Orders/AdminOrders.jsx'));
-const AdminCustomers = lazy(() => import('./pages/Admin/Customers/AdminCustomers.jsx'));
 const AdminCategories = lazy(() => import('./pages/Admin/Categories/AdminCategories.jsx'));
 const AdminSettings = lazy(() => import('./pages/Admin/Settings/AdminSettings.jsx'));
 const ForgotPassword = lazy(() => import('./pages/Login/ForgotPassword.jsx'));
@@ -96,7 +95,6 @@ function AppRoutes() {
           
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
-          <Route path="customers" element={<AdminCustomers />} />
           <Route path="categories" element={<AdminCategories />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

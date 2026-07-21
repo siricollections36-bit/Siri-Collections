@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+// 1. REMOVED: import axios from 'axios';
+// 2. ADDED: Import your custom api instance (Depth is one level up to src, then utils)
+import api from '../utils/api'; 
 
 const AuthContext = createContext(null);
 
@@ -7,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. Persist Session on Page Refresh
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -16,10 +17,12 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // 2. LOGIN FUNCTION
+  // LOGIN FUNCTION
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { 
+      // 3. CHANGED: replaced axios.post('http://localhost:5000/api/auth/login'...)
+      // with api.post('/auth/login'...)
+      const response = await api.post('/auth/login', { 
         email, 
         password 
       });
@@ -38,18 +41,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 3. SIGNUP FUNCTION (Added this)
+  // SIGNUP FUNCTION
   const signup = async (name, email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', { 
-        name, // Send name to match backend req.body
+      // 4. CHANGED: replaced axios.post('http://localhost:5000/api/auth/signup'...)
+      // with api.post('/auth/signup'...)
+      const response = await api.post('/auth/signup', { 
+        name, 
         email, 
         password 
       });
 
       const { token, user } = response.data;
 
-      // Save credentials to local storage to keep them logged in
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       
@@ -64,7 +68,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 4. LOGOUT FUNCTION
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

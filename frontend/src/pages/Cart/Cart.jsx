@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Added useState and useEffect
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { formatPrice } from '../../utils/formatters.js';
 import styles from './Cart.module.css';
 
+// Items per page limit
+const ITEMS_PER_PAGE = 4;
+
 export default function Cart() {
-  // Pulling centralized totals and functions from context
   const { 
     items, 
     removeFromCart, 
@@ -20,26 +22,45 @@ export default function Cart() {
   const { show } = useToast(); 
   const navigate = useNavigate();
 
+  // --- PAGINATION STATE ---
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate pages
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  
+  // Get current items slice
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  // Auto-adjust page if item deletion makes current page empty
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [items.length, totalPages, currentPage]);
+
+  const handlePageChange = (pageNum) => {
+    setCurrentPage(pageNum);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleRemove = (id) => {
     removeFromCart(id);
     show('Item removed from cart', 'info');
   };
 
-  // Animation settings for list items
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
     exit: { opacity: 0, scale: 0.95 },
   };
 
-  // 1. EMPTY STATE UI
   if (items.length === 0) {
     return (
       <div className={styles.cartPage}>
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>✦</div>
           <h1>Your Cart is Empty</h1>
-          <p>Discover our beautiful collection of premium sarees.</p>
           <button 
             onClick={() => navigate('/shop')} 
             className={styles.checkoutBtn} 
@@ -58,120 +79,138 @@ export default function Cart() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <h1 className={styles.title}>Shopping Cart</h1>
-
       <div className={styles.container}>
-        {/* LEFT: Items List */}
-        <div className={styles.cartItems}>
-          <AnimatePresence mode='popLayout'>
-            {items.map((item) => {
-              const itemId = item._id || item.id; 
-              
-              /**
-               * REAL-TIME STOCK LOGIC:
-               * We only treat the item as 'Limited' if the admin entered a number GREATER than 0.
-               * If stock is 0, empty string, or null, it is treated as Unlimited.
-               */
-              const isLimited = item.stock && Number(item.stock) > 0;
-              const stockLimit = isLimited ? Number(item.stock) : 9999;
+        <h1 className={styles.title}>Shopping Cart</h1>
 
-              return (
-                <motion.div
-                  key={itemId}
-                  className={styles.cartItem}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  layout
-                >
-                  <div className={styles.itemImage}>
-                    <img src={item.images?.[0] || item.image} alt={item.name} />
-                  </div>
+        <div className={styles.mainGrid}>
+          {/* LEFT: Items List */}
+          <div className={styles.leftSide}>
+            <div className={styles.cartItems}>
+              <AnimatePresence mode='popLayout'>
+                {paginatedItems.map((item) => {
+                  const itemId = item._id || item.id; 
+                  const hasRealLimit = item.stock !== undefined && item.stock !== null && item.stock !== "" && Number(item.stock) > 0;
+                  const availableStock = hasRealLimit ? Number(item.stock) : 9999;
 
-                  <div className={styles.itemDetails}>
-                    <h3 className={styles.itemName}>{item.name}</h3>
-                    <p className={styles.itemCategory}>{item.category || 'Saree'}</p>
-                    {item.fabric && <p className={styles.itemMeta}>Fabric: {item.fabric}</p>}
-                  </div>
-
-                  <div className={styles.itemPrice}>
-                    <span>{formatPrice(item.price)}</span>
-                  </div>
-
-                  {/* QUANTITY SECTION WITH SMART LIMITS */}
-                  <div className={styles.itemQuantity}>
-                    <div className={styles.qtyBox}>
-                      <button 
-                        onClick={() => updateQuantity(itemId, item.quantity - 1)}
-                        disabled={item.quantity <= 1}
-                      >−</button>
-                      
-                      <div className={styles.qtyValueWrapper}>
-                        <span className={styles.qty}>{item.quantity}</span>
-                        {/* Only show 'Limit Reached' if there is a real positive limit set */}
-                        {isLimited && item.quantity >= stockLimit && (
-                          <small className={styles.limitReached}>Limit reached</small>
-                        )}
+                  return (
+                    <motion.div 
+                      key={itemId} 
+                      className={styles.cartItem} 
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      layout
+                    >
+                      <div className={styles.itemImage}>
+                        <img src={item.images?.[0] || item.image} alt={item.name} />
                       </div>
 
-                      <button 
-                        onClick={() => updateQuantity(itemId, item.quantity + 1)}
-                        // Plus button disabled only if a real limit is reached
-                        disabled={isLimited && item.quantity >= stockLimit}
-                      >+</button>
-                    </div>
-                  </div>
+                      <div className={styles.itemDetails}>
+                        <h3 className={styles.itemName}>{item.name}</h3>
+                        <p className={styles.itemCategory}>{item.category || 'Saree'}</p>
+                        {item.fabric && <p className={styles.itemMeta}>Fabric: {item.fabric}</p>}
+                        <div className={styles.mobilePrice}>{formatPrice(item.price)}</div>
+                      </div>
 
-                  <div className={styles.itemTotal}>
-                    {formatPrice(Number(item.price) * item.quantity)}
-                  </div>
+                      <div className={styles.itemPriceDesk}>
+                        <span>{formatPrice(item.price)}</span>
+                      </div>
 
-                  <button className={styles.removeBtn} onClick={() => handleRemove(itemId)}>✕</button>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                      <div className={styles.itemQuantity}>
+                        <div className={styles.qtyBox}>
+                          <button 
+                            onClick={() => updateQuantity(itemId, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                          >−</button>
+                          
+                          <div className={styles.qtyValueWrapper}>
+                            <span className={styles.qty}>{item.quantity}</span>
+                            {hasRealLimit && item.quantity >= availableStock && (
+                              <small className={styles.limitReached}>LIMIT REACHED</small>
+                            )}
+                          </div>
+
+                          <button 
+                            onClick={() => updateQuantity(itemId, item.quantity + 1)}
+                            disabled={hasRealLimit && item.quantity >= availableStock}
+                          >+</button>
+                        </div>
+                      </div>
+
+                      <div className={styles.itemTotal}>
+                        {formatPrice(Number(item.price) * item.quantity)}
+                      </div>
+
+                      <button className={styles.removeBtn} onClick={() => handleRemove(itemId)}>✕</button>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+
+            {/* --- PAGINATION CONTROLS --- */}
+            {totalPages > 1 && (
+              <div className={styles.pagination}>
+                <button 
+                  className={styles.pageBtn} 
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
+                  ‹ Previous
+                </button>
+                
+                <div className={styles.pageNumbers}>
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i + 1}
+                      className={`${styles.pageNumber} ${currentPage === i + 1 ? styles.activePage : ''}`}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button 
+                  className={styles.pageBtn} 
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  Next ›
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT: Order Summary */}
+          <aside className={styles.summary}>
+            <h2>Order Summary</h2>
+            <div className={styles.priceBreakdown}>
+              <div className={styles.breakdownRow}>
+                <span>Subtotal ({items.length} items)</span>
+                <span>{formatPrice(cartSubtotal)}</span>
+              </div>
+              <div className={styles.breakdownRow}>
+                <span>Shipping</span>
+                {shippingFee === 0 ? <span className={styles.freeShipping}>FREE</span> : <span>{formatPrice(shippingFee)}</span>}
+              </div>
+              <div className={styles.breakdownDivider} />
+              <div className={`${styles.breakdownRow} ${styles.total}`}>
+                <span>Total</span>
+                <span>{formatPrice(cartTotal)}</span>
+              </div>
+            </div>
+            <div className={styles.summaryActions}>
+              <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
+                PROCEED TO CHECKOUT
+              </button>
+              <button className={styles.continueBtn} onClick={() => navigate('/shop')}>
+                CONTINUE SHOPPING
+              </button>
+            </div>
+          </aside>
         </div>
-
-        {/* RIGHT: Order Summary Sidebar */}
-        <aside className={styles.summary}>
-          <h2>Order Summary</h2>
-
-          <div className={styles.priceBreakdown}>
-            <div className={styles.breakdownRow}>
-              <span>Subtotal</span>
-              <span>{formatPrice(cartSubtotal)}</span>
-            </div>
-
-            <div className={styles.breakdownRow}>
-              <span>Shipping</span>
-              {shippingFee === 0 ? (
-                <span className={styles.freeShipping}>FREE</span>
-              ) : (
-                <span>{formatPrice(shippingFee)}</span>
-              )}
-            </div>
-
-            <div className={styles.breakdownDivider} />
-
-            <div className={`${styles.breakdownRow} ${styles.total}`}>
-              <span>Total</span>
-              <span>{formatPrice(cartTotal)}</span>
-            </div>
-          </div>
-
-          <div className={styles.summaryActions}>
-            <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
-              PROCEED TO CHECKOUT
-            </button>
-            
-            {/* ADDED: Continue Shopping Button */}
-            <button className={styles.continueBtn} onClick={() => navigate('/shop')}>
-              CONTINUE SHOPPING
-            </button>
-          </div>
-        </aside>
       </div>
     </motion.div>
   );

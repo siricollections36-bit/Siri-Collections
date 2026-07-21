@@ -194,12 +194,22 @@
 }
 
 .deleteBtn {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: #ff6b6b !important; 
+  color: #ffffff !important;            
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  opacity: 1 !important;
 }
 
 .deleteBtn:hover {
-  background-color: #e63946;
+  background-color: #e63946 !important; 
 }
 
 .pagination {
@@ -238,9 +248,6 @@
   color: #666;
   font-weight: 500;
 }
-
-
-
 
 .closeBtn:hover {
   color: var(--color-primary);
@@ -354,9 +361,13 @@
     font-size: 0.8rem;
   }
 
+  /* FIXED: Remove height limit to allow scrolling */
   .modal {
     width: 95%;
-    max-height: 95vh;
+    max-width: 700px;
+    max-height: none !important;
+    padding: 0;
+    overflow: visible;
   }
 
   .formRow {
@@ -373,7 +384,6 @@
     font-size: 0.7rem;
   }
 }
-/* ... keep your previous header and table styles ... */
 
 .uploadSection {
   margin-bottom: 24px;
@@ -388,7 +398,7 @@
 
 .previewCard {
   position: relative;
-  aspect-ratio: 3/4; /* Saree shape */
+  aspect-ratio: 3/4; 
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -473,9 +483,306 @@
   font-size: 0.9rem;
 }
 
-/* Removes arrows from Chrome, Safari, Edge, and Opera */
 .formGroup input::-webkit-outer-spin-button,
 .formGroup input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.container {
+  padding: 2rem;
+  background-color: var(--color-bg-ivory);
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 20px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.subtitle { color: #888; font-size: 0.9rem; margin-top: 5px; }
+
+.addBtn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tableWrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  background: #f8faf8;
+  padding: 15px;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  letter-spacing: 1px;
+  border-bottom: 2px solid #eee;
+}
+
+.table td {
+  padding: 15px;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.95rem;
+}
+
+.imgContainer {
+  width: 50px;
+  height: 65px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.imgContainer img { width: 100%; height: 100%; object-fit: cover; }
+
+.priceCell { font-weight: 700; color: var(--color-gold); }
+
+.actions { display: flex; gap: 8px; }
+
+.editBtn { background: var(--color-primary); color: white; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; }
+
+@media (max-width: 850px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .addBtn { width: 100%; text-align: center; }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px solid #f9f9f9;
+    padding: 12px 5px;
+  }
+
+  .table td:last-child { border-bottom: none; }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #aaa;
+    text-align: left;
+  }
+
+  .imgContainer { width: 45px; height: 55px; }
+  .actions { justify-content: flex-end; }
+}
+
+.modal {
+  width: 95%;
+  max-width: 700px;
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+}
+
+.form {
+  padding: 20px;
+}
+
+.uploadSection {
+  margin-bottom: 25px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.uploadTrigger {
+  aspect-ratio: 3/4;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #fcfcfc;
+  font-size: 13px;
+  color: #888;
+}
+
+.checkboxRow {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 20px;
+  margin-bottom: 25px;
+  padding: 12px;
+  background: #f8faf9;
+  border-radius: 8px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  letter-spacing: 0.5px;
+}
+
+.formGroup input, 
+.formGroup select, 
+.formGroup textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid #eee;
+  border-radius: 8px;
+  font-size: 1rem; 
+  background: #fff;
+  font-family: var(--font-sans);
+}
+
+.formGroup input:focus {
+  border-color: var(--color-primary);
+  background: #fff;
+}
+
+.formActions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.saveBtn {
+  flex: 2;
+  background: var(--color-primary);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.cancelBtn {
+  flex: 1;
+  background: #f5f5f5;
+  color: #666;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .formRow {
+    grid-template-columns: 1fr; 
+    gap: 15px;
+  }
+
+  .checkboxRow {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 20px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.pageBtn {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--color-primary);
+  background-color: white;
+  color: var(--color-primary);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 600;
 }

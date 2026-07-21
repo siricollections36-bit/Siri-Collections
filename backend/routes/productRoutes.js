@@ -15,44 +15,48 @@ const slugify = (text) => {
 
 /**
  * 1. GET ALL PRODUCTS (Advanced Filtering, Search & Pagination)
- * This handles the logic for the Shop page and Home page sections.
+ * Handles the logic for the Shop page with Global Search Priority.
  */
 router.get('/', async (req, res) => {
   try {
     const { 
       category, fabric, minPrice, maxPrice, 
-      search, sort, page = 1, limit = 12, 
+      search, sort, page = 1, limit = 8, 
       isBestSeller, isNewArrival 
     } = req.query;
 
     let query = {};
 
-    // CATEGORY FILTER: Supports multi-select (e.g., ?category=Silk,Cotton)
-    if (category) {
-      query.category = { $in: category.split(',') };
-    }
-
-    // FABRIC FILTER: Supports multi-select
-    if (fabric) {
-      query.fabric = { $in: fabric.split(',') };
+    /**
+     * MODIFICATION: GLOBAL SEARCH PRIORITY
+     * If a search term exists, we search globally across Name and SKU.
+     * We ignore category and fabric filters when searching to ensure the 
+     * specific SKU/Product is found regardless of the active sidebar selection.
+     */
+    if (search && search.trim() !== "") {
+      const searchRegex = { $regex: search.trim(), $options: 'i' };
+      query.$or = [
+        { name: searchRegex },
+        { sku: searchRegex }
+      ];
+    } else {
+      // Normal filtering applies ONLY when NOT searching
+      if (category) {
+        query.category = { $in: category.split(',') };
+      }
+      if (fabric) {
+        query.fabric = { $in: fabric.split(',') };
+      }
     }
     
-    // PRICE RANGE FILTER: Converts strings to Numbers for MongoDB comparison
+    // Always apply Price Range if provided (even during search)
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice) query.price.$gte = Number(minPrice);
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
-    // SEARCH LOGIC: Case-insensitive search on Name or SKU
-    if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { sku: { $regex: search, $options: 'i' } }
-      ];
-    }
-
-    // HOME PAGE FLAGS: Handles both Boolean and String "true"
+    // Always apply Best Seller / New Arrival flags if provided
     if (isBestSeller) query.isBestSeller = String(isBestSeller) === 'true';
     if (isNewArrival) query.isNewArrival = String(isNewArrival) === 'true';
 
@@ -109,7 +113,6 @@ router.post('/add', upload.array('images', 5), async (req, res) => {
 
     const imageUrls = req.files.map(file => file.path);
     
-    // SKU Logic: set to undefined if empty so the 'sparse' unique index works
     const skuValue = req.body.sku && req.body.sku.trim() !== "" ? req.body.sku.trim() : undefined;
 
     const newProduct = new Product({
@@ -146,12 +149,10 @@ router.put('/:id', upload.array('images', 5), async (req, res) => {
   try {
     const updateData = { ...req.body };
 
-    // Update images only if new ones are uploaded
     if (req.files && req.files.length > 0) {
       updateData.images = req.files.map(file => file.path);
     }
 
-    // Ensure numeric and boolean fields are correctly typed
     if (req.body.price) updateData.price = Number(req.body.price);
     if (req.body.originalPrice) updateData.originalPrice = Number(req.body.originalPrice);
     if (req.body.stock) updateData.stock = Number(req.body.stock);
@@ -159,10 +160,8 @@ router.put('/:id', upload.array('images', 5), async (req, res) => {
     if (req.body.isBestSeller !== undefined) updateData.isBestSeller = String(req.body.isBestSeller) === 'true';
     if (req.body.isNewArrival !== undefined) updateData.isNewArrival = String(req.body.isNewArrival) === 'true';
     
-    // Allow clearing SKU
     if (updateData.sku === "") updateData.sku = undefined;
     
-    // Update slug if name changed
     if (req.body.name) updateData.slug = slugify(req.body.name);
 
     const updated = await Product.findByIdAndUpdate(
@@ -189,10 +188,8 @@ router.delete('/:id', async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Step 1: Remove images from Cloudinary storage
     if (product.images && product.images.length > 0) {
       const deletePromises = product.images.map(url => {
-        // Robust publicId extraction using regex
         const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\./);
         const publicId = match ? match[1] : null;
         return publicId ? cloudinary.uploader.destroy(publicId) : null;
@@ -200,7 +197,6 @@ router.delete('/:id', async (req, res) => {
       await Promise.all(deletePromises);
     }
 
-    // Step 2: Remove data from MongoDB
     await Product.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Product and photos deleted." });
   } catch (err) {

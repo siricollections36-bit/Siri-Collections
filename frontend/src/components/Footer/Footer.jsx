@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; 
+
 import styles from './Footer.module.css';
 
 // FIX: Use the exact path to your logo from the assets folder
@@ -20,7 +21,7 @@ export default function Footer() {
   useEffect(() => {
     const fetchFooterData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/admin/settings');
+        const res = await api.get('/admin/settings');
         if (res.data) {
           // Sync state with the real keys from your database
           setSettings(res.data);

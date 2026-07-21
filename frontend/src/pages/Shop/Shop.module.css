@@ -3,10 +3,12 @@
   min-height: 100vh;
 }
 
-/* --- Page Hero --- */
+/* --- PAGE HERO --- */
 .pageHero {
   background: var(--color-primary);
-  padding: 40px 0 30px;
+  padding: 60px 0 40px;
+  text-align: center;
+  color: #fff;
 }
 
 .heroInner {
@@ -17,35 +19,41 @@
 
 .pageTitle {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
 .pageCount {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  opacity: 0.8;
 }
 
-/* --- Main Layout --- */
+/* --- MAIN LAYOUT --- */
 .layout {
-  max-width: 1280px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 40px 20px;
   display: grid;
-  /* Desktop: 280px sidebar, rest is products */
-  grid-template-columns: 260px 1fr; 
+  grid-template-columns: 260px 1fr; /* Sidebar width for Desktop */
   gap: 40px;
   align-items: start;
 }
 
+/* --- SIDEBAR & MOBILE DRAWER LOGIC --- */
 .sidebar {
   position: sticky;
   top: 100px;
+  z-index: 100;
 }
 
-/* --- Toolbar (Search & Sort) --- */
+/* Hide Mobile Elements on Desktop by default */
+.backdrop, .drawerHeader, .applyBtn, .mobileActions {
+  display: none;
+}
+
+/* --- TOOLBAR (Search & Sort) --- */
 .toolbar {
   display: flex;
   flex-direction: column;
@@ -56,113 +64,247 @@
 .searchWrapper {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .searchInput {
   width: 100%;
-  padding: 12px 15px 12px 40px;
+  padding: 14px 15px 14px 45px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background: #fff;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  transition: border-color 0.3s;
 }
 
-.sortWrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.searchInput:focus {
+  border-color: var(--color-primary);
 }
 
-.sortSelect {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: white;
-  font-size: 0.9rem;
-}
-
-/* --- THE GRID (CRITICAL FOR MOBILE IMAGE SIZE) --- */
+/* --- PRODUCT GRID --- */
 .grid {
   display: grid;
-  /* Desktop: 3 sarees per row */
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for Desktop */
   gap: 25px;
 }
 
-/* --- TABLET VIEW (1024px and down) --- */
+/* --- TABLET & MOBILE RESPONSIVE OVERRIDES --- */
+
 @media (max-width: 1024px) {
   .layout {
-    grid-template-columns: 1fr; /* Stack sidebar and grid */
+    grid-template-columns: 1fr;
     padding: 20px;
-    gap: 20px;
+    gap: 0;
   }
 
-  /* We hide the large sidebar on mobile to prevent huge spacing */
+  /* TRANSFORM SIDEBAR INTO MOBILE DRAWER */
   .sidebar {
-    display: none; 
+    position: fixed;
+    top: 0;
+    left: -100%; /* Hidden off-screen left */
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    z-index: 2000;
   }
 
-  .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  /* When JS adds .active class */
+  .sidebar.active {
+    left: 0;
   }
-}
 
-/* --- MOBILE VIEW (768px and down) --- */
-@media (max-width: 768px) {
-  .toolbar {
+  .backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .drawerContent {
+    position: relative;
+    width: 300px;
+    height: 100%;
+    background: white;
+    padding: 25px;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    box-shadow: 10px 0 40px rgba(0,0,0,0.2);
   }
 
-  .searchWrapper {
-    max-width: 100%;
+  .drawerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
   }
+
+  .drawerHeader h3 { 
+    font-family: var(--font-serif); 
+    color: var(--color-primary); 
+    margin: 0;
+  }
+
+  .closeBtn { 
+    font-size: 24px; 
+    color: #999;
+  }
+
+  .applyBtn {
+    display: block;
+    margin-top: 20px;
+    background: var(--color-primary);
+    color: white;
+    padding: 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* SHOW MOBILE FILTER BAR */
+  .mobileActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .filterToggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 0.9rem;
+  }
+
+  .vDivider { width: 1px; height: 20px; background: #ddd; }
 
   .grid {
-    /* STICK TO 2 COLUMNS: This is the secret to making images small on phones */
+    /* 2 COLUMNS ON MOBILE - PREVENTS HUGE IMAGES */
     grid-template-columns: repeat(2, 1fr); 
-    gap: 12px; /* Tighter gap for small screens */
-  }
-
-  .pageHero {
-    padding: 30px 0 20px;
-    text-align: center;
+    gap: 15px;
   }
 }
 
-/* --- VERY SMALL PHONES (iPhone SE, etc) --- */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr); /* Still 2 columns to keep images tiny */
+    gap: 10px; /* Even tighter for small phones */
+  }
+  
+  .pageHero { padding: 40px 15px; }
+  
+  .pagination {
     gap: 8px;
   }
   
-  .pageTitle { font-size: 1.5rem; }
+  .pageNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
 }
 
-/* --- Pagination --- */
+/* --- PAGINATION --- */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
   margin-top: 50px;
+  padding-bottom: 40px;
 }
 
 .pageNumber {
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border: 1px solid #ddd;
   background: white;
+  color: var(--color-text-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   border-radius: 4px;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
 .activePage {
   background: var(--color-primary) !important;
+  color: #fff !important;
+  border-color: var(--color-primary) !important;
+}
+
+.pageBtn {
+  padding: 8px 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+.pageBtn:disabled { opacity: 0.2; }
+.topNavRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  border-color: var(--color-primary);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+  background: white;
+  color: var(--color-primary);
+  transform: translateX(-5px);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.breadcrumb a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .topNavRow {
+    margin-bottom: 15px;
+  }
+  .backBtn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
 }

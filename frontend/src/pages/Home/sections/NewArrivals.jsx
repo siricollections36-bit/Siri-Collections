@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api'; 
+
 import ProductCard from '../../../components/ProductCard/ProductCard.jsx';
 import styles from './NewArrivals.module.css';
 
@@ -11,7 +12,7 @@ export default function NewArrivals() {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products');
+        const res = await api.get('/products');
         // Support both paginated {products: []} and flat array data
         const allData = res.data.products || res.data;
 

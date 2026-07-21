@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import { useAuth } from '../../context/AuthContext';
 import { formatPrice } from '../../utils/formatters';
 import Loader from '../../components/Loader/Loader';
@@ -18,7 +18,7 @@ export default function Orders() {
       try {
         setLoading(true);
         // Fetch real data from our backend
-        const res = await axios.get(`http://localhost:5000/api/orders/my-orders/${user.email}`);
+        const res = await api.get(`/orders/my-orders/${user.email}`);
         setOrders(res.data);
       } catch (err) {
         console.error("Failed to load orders");

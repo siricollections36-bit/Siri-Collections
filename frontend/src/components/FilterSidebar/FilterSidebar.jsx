@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import styles from './FilterSidebar.module.css';
 
 export default function FilterSidebar({ filters, onChange, onClear }) {
@@ -11,8 +11,11 @@ export default function FilterSidebar({ filters, onChange, onClear }) {
     setLocalMaxPrice(filters.maxPrice);
   }, [filters.maxPrice]);
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/categories').then(res => setLiveCategories(res.data));
+   useEffect(() => {
+    // 3. CHANGED: Using api.get and relative path
+    api.get('/categories')
+      .then(res => setLiveCategories(res.data))
+      .catch(err => console.error("Filter categories load failed", err));
   }, []);
 
   const handleCheckboxChange = (key, value) => {

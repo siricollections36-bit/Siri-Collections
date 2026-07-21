@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'; // 1. Added Hooks
 import { motion } from 'framer-motion';
-import axios from 'axios'; // 2. Added Axios
+import api from '../../../utils/api'; 
+
 import CategoryCard from '../../../components/CategoryCard/CategoryCard.jsx';
 import styles from './FeaturedCollections.module.css';
 
@@ -22,7 +23,7 @@ export default function FeaturedCollections() {
   useEffect(() => {
     const fetchLiveCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/categories');
+        const res = await api.get('/categories');
         setCategoriesList(res.data);
       } catch (err) {
         console.error("Failed to load collections from database", err);

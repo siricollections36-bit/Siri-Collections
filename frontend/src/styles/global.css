@@ -378,3 +378,98 @@ ul, ol {
   .btn { padding: 10px 20px; }
   .btn-lg { padding: 12px 24px; }
 }
+
+
+
+
+.grid-2, .grid-3, .grid-4 {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* -----------------------------------------------------------
+   RESPONSIVE OVERRIDES (MOBILE FIRST)
+   ----------------------------------------------------------- */
+
+/* Table (1024px) */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(3, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .section { padding: var(--space-6) 0; }
+}
+
+/* Mobile (768px) - THE BIG IMAGE FIX */
+@media (max-width: 768px) {
+  .container { padding: 0 var(--space-3); }
+
+  /* 
+     FORCE 2 COLUMNS: This is the secret. 
+     Instead of sarees stacking 1-by-1 (huge), 
+     they stay side-by-side (neat).
+  */
+  .grid-4, .grid-3, .grid-2 { 
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 15px; 
+  }
+
+  .section-title { font-size: 1.8rem; }
+
+  /* Larger tap area for buttons on mobile */
+  .btn {
+    padding: 14px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tiny Phones (480px) */
+@media (max-width: 480px) {
+  /* Still 2 columns to maintain the boutique look */
+  .grid-4, .grid-3, .grid-2 { 
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 10px; 
+  }
+}
+
+/* -----------------------------------------------------------
+   GLOBAL UI COMPONENTS
+   ----------------------------------------------------------- */
+
+/* Badge Styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Smooth Image Loading */
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Professional Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-ivory);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}

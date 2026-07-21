@@ -1,73 +1,83 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext(null);
+const WISHLIST_KEY = 'siri_wishlist_storage';
 
 export function WishlistProvider({ children }) {
-  const [wishlistItems, setWishlistItems] = useState([]); // ALWAYS start with empty array
-  const { user } = useAuth();
-
-  useEffect(() => {
-    const loadWishlist = async () => {
-      if (user) {
-        try {
-          // Change this URL if your backend port is different
-          const res = await axios.get(`http://localhost:5000/api/auth/wishlist/${user.id || user._id}`);
-          // Ensure we only set the state if data is an array
-          setWishlistItems(Array.isArray(res.data) ? res.data : []);
-        } catch (err) {
-          console.error("Cloud Wishlist Fetch Failed");
-          setWishlistItems([]); 
-        }
-      } else {
-        const stored = localStorage.getItem('siri_wishlist');
-        setWishlistItems(stored ? JSON.parse(stored) : []);
-      }
-    };
-    loadWishlist();
-  }, [user]);
-
-  // Sync to local storage for guests
-  useEffect(() => {
-    if (!user) {
-      localStorage.setItem('siri_wishlist', JSON.stringify(wishlistItems));
+  const { user, loading: authLoading } = useAuth();
+  
+  // Initialize: Users load saved list, Guests always start empty on refresh
+  const [wishlistItems, setWishlistItems] = useState(() => {
+    const hasUser = localStorage.getItem('user');
+    if (hasUser) {
+      const saved = localStorage.getItem(WISHLIST_KEY);
+      return saved ? JSON.parse(saved) : [];
     }
-  }, [wishlistItems, user]);
+    return [];
+  });
+
+  useEffect(() => {
+    if (authLoading) return;
+
+    if (user) {
+      const fetchWishlist = async () => {
+        try {
+          const res = await api.get(`/auth/wishlist/${user.id || user._id}`);
+          if (res.data) {
+            setWishlistItems(res.data);
+            localStorage.setItem(WISHLIST_KEY, JSON.stringify(res.data));
+          }
+        } catch (err) {
+          console.error("Wishlist Database Fetch Failed");
+        }
+      };
+      fetchWishlist();
+    } else {
+      // Confirm Guest: Wipe storage
+      setWishlistItems([]);
+      localStorage.removeItem(WISHLIST_KEY);
+    }
+  }, [user, authLoading]);
 
   const toggleWishlist = async (product) => {
     const productId = product._id || product.id;
-    
-    // Optimistic UI update (makes the site feel fast)
-    const isAlreadyThere = wishlistItems.some(item => (item._id || item.id) === productId);
+    const isAlreadyThere = wishlistItems.some(i => (i._id || i.id) === productId);
+
+    let updatedList;
     if (isAlreadyThere) {
-      setWishlistItems(prev => prev.filter(item => (item._id || item.id) !== productId));
+      updatedList = wishlistItems.filter(i => (i._id || i.id) !== productId);
     } else {
-      setWishlistItems(prev => [...prev, product]);
+      updatedList = [...wishlistItems, product];
     }
 
-    if (user) {
-      try {
-        await axios.post('http://localhost:5000/api/auth/wishlist/toggle', {
-          userId: user.id || user._id,
-          productId: productId
-        });
-      } catch (err) {
-        console.error("Backend wishlist sync failed");
+    setWishlistItems(updatedList);
+    
+    // If logged in, sync to both localStorage (for refresh) and Database
+    if (localStorage.getItem('user')) {
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(updatedList));
+      if (user) {
+        try {
+          await api.post('/auth/wishlist/toggle', {
+            userId: user.id || user._id,
+            productId
+          });
+        } catch (err) {
+          console.error("Wishlist Database Sync Failed");
+        }
       }
     }
   };
 
-  const isWishlisted = (productId) => {
-    return wishlistItems?.some(item => (item._id || item.id) === productId) || false;
-  };
+  const isWishlisted = (productId) => wishlistItems.some(i => (i._id || i.id) === productId);
 
   return (
     <WishlistContext.Provider value={{ 
-      wishlistItems: wishlistItems || [], // Force fallback to empty array
+      wishlistItems, 
       toggleWishlist, 
       isWishlisted, 
-      wishlistCount: wishlistItems?.length || 0 
+      wishlistCount: wishlistItems.length 
     }}>
       {children}
     </WishlistContext.Provider>

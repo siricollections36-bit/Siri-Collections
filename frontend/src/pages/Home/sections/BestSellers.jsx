@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api'; 
 import ProductCard from '../../../components/ProductCard/ProductCard.jsx';
 import styles from './BestSellers.module.css';
 
@@ -10,7 +10,7 @@ export default function BestSellers() {
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products');
+        const res = await api.get('/products');
         // Handle paginated or flat data
         const allProducts = res.data.products || res.data;
         

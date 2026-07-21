@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import { useToast } from '../../context/ToastContext';
 import styles from './Login.module.css'; // Reuse login styles
 
@@ -12,7 +12,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      const { data } = await api.post('/auth/forgot-password', { email });
       show(data.message, 'success');
     } catch (err) {
       show(err.response?.data?.message || 'Error sending email', 'error');

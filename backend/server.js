@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
+const { webcrypto } = require('crypto');
+global.crypto = webcrypto;
 // Load environment variables from .env file
 dotenv.config();
 
@@ -12,7 +13,14 @@ const app = express();
  * MIDDLEWARE
  */
 // Enable CORS for frontend communication
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',          // Your local test site
+    'https://shopsiricollections.com',    // Your future .com
+    'https://www.shopsiricollections.com' // Your future .com with www
+  ],
+  credentials: true
+}));
 
 // Parse JSON bodies (standard API requests)
 app.use(express.json());

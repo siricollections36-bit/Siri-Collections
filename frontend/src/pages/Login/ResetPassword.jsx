@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import { useToast } from '../../context/ToastContext';
 import styles from './Login.module.css';
 
@@ -18,7 +18,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
+      await api.put(`/auth/reset-password/${token}`, { password });
       show("Password updated! Please login.", "success");
       navigate('/login');
     } catch (err) {

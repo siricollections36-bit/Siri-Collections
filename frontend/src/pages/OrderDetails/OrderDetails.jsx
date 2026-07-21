@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import { formatPrice } from '../../utils/formatters';
 import Loader from '../../components/Loader/Loader';
 import styles from './OrderDetails.module.css';
@@ -15,7 +15,7 @@ export default function OrderDetails() {
       try {
         setLoading(true);
         // Correct API call to your backend
-        const res = await axios.get(`http://localhost:5000/api/orders/${id}`);
+        const res = await api.get(`/orders/${id}`);
         setOrder(res.data);
       } catch (err) {
         console.error("Order Details Fetch Error:", err);

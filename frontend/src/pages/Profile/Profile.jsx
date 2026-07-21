@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import { useAuth } from '../../context/AuthContext';
 import { formatPrice } from '../../utils/formatters';
 import Loader from '../../components/Loader/Loader';
@@ -17,7 +17,9 @@ export default function Profile() {
       if (!user?.email) return;
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:5000/api/orders/user/${user.email}`);
+        // 3. CHANGED: Using api.get and the relative path
+        // Removed the complex template literal and kept just the endpoint
+        const res = await api.get(`/orders/user/${user.email}`);
         setOrders(res.data);
       } catch (err) {
         console.error("Error fetching history:", err);
@@ -28,6 +30,7 @@ export default function Profile() {
     fetchMyOrders();
   }, [user]);
 
+
   if (!user) return <div className={styles.loginMessage}>Please log in to view your profile.</div>;
 
   return (
@@ -37,7 +40,9 @@ export default function Profile() {
         <div className={styles.profileCard}>
           <div className={styles.headerFlex}>
             <div className={styles.avatarSection}>
-              <div className={styles.avatar}>{user.name[0].toUpperCase()}</div>
+              <div className={styles.avatar}>
+                {user.name ? user.name[0].toUpperCase() : 'U'}
+              </div>
               <div className={styles.userMainInfo}>
                 <h1>{user.name}</h1>
                 <p>{user.email}</p>
@@ -56,6 +61,12 @@ export default function Profile() {
               onClick={() => setActiveTab('info')}
             >
               Personal Info
+            </button>
+            <button 
+              className={`${styles.tab} ${activeTab === 'orders' ? styles.activeTab : ''}`}
+              onClick={() => setActiveTab('orders')}
+            >
+              My Orders
             </button>
           </div>
         </div>
@@ -95,12 +106,12 @@ export default function Profile() {
                   {orders.map((order) => (
                     <div key={order._id} className={styles.orderCard}>
                       <div className={styles.orderHeader}>
-                        <div>
-                          <span className={styles.orderId}>Order #{order.orderNumber}</span>
+                        <div className={styles.orderInfo}>
+                          <span className={styles.orderId}>Order #{order.orderNumber || order._id.slice(-6)}</span>
                           <p className={styles.orderDate}>{new Date(order.createdAt).toLocaleDateString()}</p>
                         </div>
                         <div className={styles.orderStatus}>
-                           <span className={`${styles.statusDot} ${styles[order.orderStatus.toLowerCase()]}`}></span>
+                           <span className={`${styles.statusDot} ${styles[order.orderStatus?.toLowerCase() || 'pending']}`}></span>
                            {order.orderStatus}
                         </div>
                       </div>
@@ -108,13 +119,16 @@ export default function Profile() {
                         {order.items.map((item, idx) => (
                           <div key={idx} className={styles.miniItem}>
                             <img src={item.image} alt="" />
-                            <span>{item.name} (x{item.quantity})</span>
+                            <div className={styles.itemDetails}>
+                                <span>{item.name}</span>
+                                <small>Qty: {item.quantity}</small>
+                            </div>
                           </div>
                         ))}
                       </div>
                       <div className={styles.orderFooter}>
-                        <span>Total Paid: <strong>{formatPrice(order.totalAmount)}</strong></span>
-                        <button className={styles.viewDetailsBtn}>Track Order</button>
+                        <span>Total: <strong>{formatPrice(order.totalAmount)}</strong></span>
+                        <button className={styles.viewDetailsBtn}>Track</button>
                       </div>
                     </div>
                   ))}

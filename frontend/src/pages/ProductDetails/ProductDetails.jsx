@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api'; 
 import { useCart } from '../../context/CartContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import Loader from '../../components/Loader/Loader';
@@ -9,6 +9,7 @@ import styles from './ProductDetails.module.css';
 
 export default function ProductDetails() {
   const { slug } = useParams(); 
+  const navigate = useNavigate(); 
   const { addToCart } = useCart();
   const { show } = useToast();
   
@@ -16,12 +17,13 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0); 
   const [quantity, setQuantity] = useState(1);
+  const [isDescOpen, setIsDescOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:5000/api/products/${slug}`);
+        const res = await api.get(`/products/${slug}`);
         setProduct(res.data);
         setActiveImg(0); 
       } catch (err) {
@@ -34,27 +36,36 @@ export default function ProductDetails() {
   }, [slug]);
 
   /**
-   * STOCK VALIDATION LOGIC
-   * Prevents adding more than available stock
+   * SMART BACK LOGIC
+   * Preserves filters by going back in history, 
+   * or defaults to /shop if no history exists.
    */
+  const handleSmartBack = () => {
+    // window.history.state.idx > 0 means the user has 
+    // navigated within our app to get here.
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      // If they landed here directly from a link, take them to the Shop
+      navigate('/shop');
+    }
+  };
+
   const handleAddToCart = () => {
     if (!product || product.stock <= 0) {
       show("Sorry, this item is currently out of stock", "error");
       return;
     }
-
     if (quantity > product.stock) {
       show(`Only ${product.stock} items available in stock`, "error");
       return;
     }
-    
     addToCart({
       ...product,
       id: product._id, 
       quantity: quantity,
-      stock: product.stock // Pass stock count to cart for further validation
+      stock: product.stock 
     });
-    
     show(`${product.name} added to bag`, "success");
   };
 
@@ -63,9 +74,20 @@ export default function ProductDetails() {
 
   return (
     <div className={styles.container}>
-      <nav className={styles.breadcrumb}>
-        <Link to="/">Home</Link> / <Link to="/shop">Shop</Link> / <span>{product.name}</span>
-      </nav>
+      {/* TOP NAVIGATION ROW */}
+      <div className={styles.topNavigation}>
+        <button className={styles.backBtn} onClick={handleSmartBack}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Shop
+        </button>
+        
+        <nav className={styles.breadcrumb}>
+          <Link to="/">Home</Link> / <Link to="/shop">Shop</Link> / <span>{product.name}</span>
+        </nav>
+      </div>
 
       <div className={styles.mainGrid}>
         
@@ -106,18 +128,11 @@ export default function ProductDetails() {
 
           <div className={styles.divider} />
           
-          <div className={styles.descriptionArea}>
-            <h3>Description</h3>
-            <p className={styles.description}>
-              {product.description || "Experience timeless elegance with this handcrafted piece from Siri Textiles. Expertly woven using traditional techniques, this item features intricate patterns and premium fabric quality."}
-            </p>
-          </div>
-
           <div className={styles.metaData}>
-            <p><strong>Fabric:</strong> {product.fabric || 'Pure Premium Quality'}</p>
-            <p><strong>Product Code:</strong> {product.sku || 'ST-WEB-001'}</p>
+            <p className={styles.infoLine}><strong>Fabric:</strong> {product.fabric || 'Pure Premium Quality'}</p>
+            <p className={styles.infoLine}><strong>Product Code:</strong> {product.sku || 'ST-WEB-001'}</p>
             
-            <p>
+            <p className={styles.infoLine}>
               <strong>Availability:</strong> 
               {product.stock > 0 ? (
                 <span className={styles.inStock}>✓ In Stock</span>
@@ -125,28 +140,13 @@ export default function ProductDetails() {
                 <span className={styles.outOfStock}>✕ Out of Stock</span>
               )}
             </p>
-            
-            {/* Show urgency message if stock is low (Optional Scalability feature) */}
-            {product.stock > 0 && product.stock <= 5 && (
-              <p className={styles.lowStockWarning}>🔥 Hurry! Only {product.stock} left in stock.</p>
-            )}
           </div>
 
-          {/* PURCHASE ACTIONS */}
           <div className={styles.actionRow}>
             <div className={styles.quantitySelector}>
-              <button 
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                disabled={quantity <= 1}
-              >−</button>
-              
+              <button onClick={() => setQuantity(q => Math.max(1, q - 1))} disabled={quantity <= 1}>−</button>
               <span>{quantity}</span>
-              
-              <button 
-                onClick={() => setQuantity(q => q + 1)}
-                // THE FIX: Disable button when reaching stock limit
-                disabled={quantity >= product.stock}
-              >+</button>
+              <button onClick={() => setQuantity(q => q + 1)} disabled={quantity >= product.stock}>+</button>
             </div>
 
             <button 
@@ -158,12 +158,24 @@ export default function ProductDetails() {
             </button>
           </div>
 
-          <div className={styles.trustMarkers}>
-             <p>✓ 100% Authentic Handcrafted Saree</p>
-             <p>✓ Secure Razorpay Checkout</p>
+          <div className={styles.dropdownSection}>
+            <button 
+              className={styles.dropdownHeader} 
+              onClick={() => setIsDescOpen(!isDescOpen)}
+            >
+              <span>Description</span>
+              <span className={`${styles.chevron} ${isDescOpen ? styles.chevronOpen : ''}`}>▾</span>
+            </button>
+            
+            {isDescOpen && (
+              <div className={styles.dropdownContent}>
+                <p className={styles.description}>
+                  {product.description || "Experience timeless elegance with this handcrafted piece from Siri Textiles."}
+                </p>
+              </div>
+            )}
           </div>
         </div>
-
       </div>
     </div>
   );

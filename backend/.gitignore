@@ -1,0 +1,14 @@
+# Dependency directories (Huge files we don't need on GitHub)
+node_modules/
+
+# Secrets (THE MOST IMPORTANT LINE - keeps your keys safe)
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db

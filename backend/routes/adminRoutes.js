@@ -11,10 +11,9 @@ const Settings = require('../models/Settings');
  */
 router.get('/stats', async (req, res) => {
   try {
-    const [totalOrders, totalProducts, totalCustomers] = await Promise.all([
+    const [totalOrders, totalProducts] = await Promise.all([
       Order.countDocuments(),
       Product.countDocuments(),
-      User.countDocuments({ role: 'customer' })
     ]);
 
     res.json({

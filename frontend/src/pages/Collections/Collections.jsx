@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../../utils/api'; 
 import CategoryCard from '../../components/CategoryCard/CategoryCard.jsx';
 import Loader from '../../components/Loader/Loader.jsx';
 import styles from './Collections.module.css';
@@ -13,7 +13,7 @@ export default function Collections() {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/categories');
+        const res = await api.get('/categories');
         setCollections(res.data);
       } catch (err) {
         console.error("Failed to load collections");

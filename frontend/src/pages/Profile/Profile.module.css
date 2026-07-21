@@ -1,5 +1,5 @@
 .pageBackground {
-  background-color: #fcfaf2; /* Soft cream */
+  background-color: #fcfaf2;
   min-height: 90vh;
   padding: 40px 0;
 }
@@ -23,6 +23,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 .avatarSection {
@@ -42,49 +43,65 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .userMainInfo h1 {
-  font-size: 24px;
+  font-size: 22px;
   color: #333;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  word-break: break-word;
 }
 
 .userMainInfo p {
   color: #666;
   margin-bottom: 8px;
+  font-size: 14px;
+  word-break: break-all;
 }
 
 .badge {
   background: #e8f0eb;
   color: #1a4a34;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
 }
 
-/* Tabs */
-.tabWrapper {
-  margin-bottom: 20px;
+.logoutBtn {
+  background: none;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+  white-space: nowrap;
 }
 
+.logoutBtn:hover {
+  background: #fdf2f2;
+}
+
+/* Tab Navigation */
 .tabs {
   display: flex;
-  gap: 30px;
-  border-bottom: 1px solid #ddd;
+  gap: 25px;
+  border-bottom: 1px solid #eee;
 }
 
 .tab {
   background: none;
   border: none;
-  padding: 10px 0;
-  font-size: 16px;
+  padding: 12px 0;
+  font-size: 15px;
   color: #888;
   cursor: pointer;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .activeTab {
@@ -104,7 +121,7 @@
 /* Content Area */
 .contentCard {
   background: white;
-  padding: 40px;
+  padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
@@ -117,98 +134,159 @@
 
 .infoItem label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   color: #999;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
 }
 
 .infoItem p {
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
   font-weight: 500;
+  word-break: break-all;
 }
 
-.editProfileBtn {
-  margin-top: 40px;
-  background-color: #1a4a34;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-/* Order Section */
-.emptyState {
-  text-align: center;
-  padding: 40px 0;
-}
-
-.emptyIcon {
-  font-size: 50px;
-  margin-bottom: 15px;
-}
-
-.shopBtn {
-  display: inline-block;
-  margin-top: 20px;
-  background-color: #1a4a34;
-  color: white;
-  text-decoration: none;
-  padding: 10px 25px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
+/* Order Section Styles */
 .orderCard {
   border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 15px;
   margin-bottom: 15px;
 }
 
 .orderHeader {
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #fafafa;
+  padding-bottom: 10px;
   margin-bottom: 15px;
 }
 
-.orderId { font-weight: 700; color: #1a4a34; }
-.orderDate { font-size: 13px; color: #888; }
+.orderStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pending { background: #ffa000; }
+.delivered { background: #4caf50; }
+.cancelled { background: #f44336; }
 
 .miniItem {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .miniItem img {
-  width: 40px;
-  height: 50px;
+  width: 50px;
+  height: 60px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
 }
+
+.itemDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.itemDetails span { font-size: 14px; font-weight: 500; }
+.itemDetails small { color: #888; }
 
 .orderFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15px;
-  padding-top: 15px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px dashed #eee;
 }
 
-.logoutBtn {
-  background: none;
-  border: 1px solid #d32f2f;
-  color: #d32f2f;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+.viewDetailsBtn {
+    background: #f5f5f5;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
-.logoutBtn:hover { background: #fdf2f2; }
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .pageBackground {
+    padding: 20px 0;
+  }
+
+  .headerFlex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logoutBtn {
+    align-self: flex-end;
+    margin-top: -40px; /* Moves it up next to text on some layouts or keeps it separate */
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr; /* Single column for info on mobile */
+    gap: 20px;
+  }
+
+  .contentCard {
+    padding: 20px;
+  }
+
+  .tabs {
+    gap: 15px;
+  }
+
+  .tab {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .userMainInfo h1 {
+    font-size: 18px;
+  }
+
+  .logoutBtn {
+    position: static;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .headerFlex {
+      align-items: center;
+      text-align: center;
+  }
+
+  .avatarSection {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .orderHeader {
+      flex-direction: column;
+      gap: 10px;
+  }
+}

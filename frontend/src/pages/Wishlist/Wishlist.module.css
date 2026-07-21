@@ -1,174 +1,191 @@
 .wishlistPage {
   min-height: 100vh;
   background-color: var(--color-bg-ivory);
-  padding: 60px 20px; /* Increased top padding */
+  padding: 60px 20px;
 }
 
 .header {
-  max-width: 1200px; /* Reduced from 1400px to keep content centered and smaller */
-  margin: 0 auto 40px;
   text-align: center;
+  margin-bottom: 50px;
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: 42px; /* Slightly smaller for better proportions */
-  font-weight: 400;
+  font-size: 3rem;
   color: var(--color-primary);
-  margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.divider::before, .divider::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background-color: var(--color-gold);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-gold);
+  border-radius: 50%;
 }
 
 .subtitle {
   font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 2px;
   font-size: 13px;
   color: var(--color-primary);
-  opacity: 0.6;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  opacity: 0.7;
 }
 
-/* Empty State */
-.emptyState {
-  text-align: center;
-  padding: 100px 40px;
-  background-color: var(--color-bg-white);
-  border: 1px solid rgba(5, 71, 42, 0.1);
-  border-radius: 12px;
-  max-width: 600px;
+.container {
+  max-width: 1200px; /* Constrains card size on big screens */
   margin: 0 auto;
 }
 
-.emptyIcon {
-  font-size: 60px;
-  margin-bottom: 20px;
-  opacity: 0.15;
-  display: block;
-}
-
-/* Wishlist Grid - THE MAIN CHANGE */
+/* --- GRID SYSTEM (RESPONSIVE) --- */
 .wishlistGrid {
-  max-width: 1200px; /* Constrained width to prevent huge cards */
-  margin: 0 auto 60px;
   display: grid;
-  /* Changed to 5 columns to make images smaller and more boutique-style */
-  grid-template-columns: repeat(5, 1fr); 
-  gap: 25px;
+  grid-template-columns: repeat(4, 1fr); /* Desktop: 4 columns */
+  gap: 30px;
 }
 
 .wishlistItem {
   position: relative;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
-  background: white;
-  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.productWrapper {
-  width: 100%;
-}
-
-/* Action Overlay - Fixed for Hover */
+/* --- DESKTOP HOVER OVERLAY --- */
 .actionOverlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(5, 71, 42, 0.7); /* Slightly more transparent for elegance */
+  background: rgba(5, 71, 42, 0.7); /* SIRI GREEN tint */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  opacity: 0; /* Hidden by default */
-  transition: opacity 0.3s ease;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 5;
 }
 
-/* Shows the "Move to Cart" button when the whole item is hovered */
 .wishlistItem:hover .actionOverlay {
   opacity: 1;
 }
 
 .moveToCartBtn {
-  padding: 10px 20px;
-  background-color: white;
+  background: white;
   color: var(--color-primary);
   border: none;
+  padding: 12px 24px;
   border-radius: 4px;
-  font-family: var(--font-sans);
-  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  transform: translateY(10px);
+  transform: translateY(15px);
+  transition: 0.3s ease;
 }
 
 .wishlistItem:hover .moveToCartBtn {
   transform: translateY(0);
 }
 
-.moveToCartBtn:hover {
-  background-color: var(--color-gold);
-  color: white;
-}
-
-/* Remove Button - Top Right Heart/X */
+/* --- REMOVE BUTTON --- */
 .removeBtn {
   position: absolute;
   top: 10px;
   right: 10px;
   width: 30px;
   height: 30px;
+  background: white;
   border-radius: 50%;
-  background-color: white;
-  border: none;
-  font-size: 14px;
-  color: #d32f2f;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+  color: #d32f2f;
+  font-size: 14px;
 }
 
-.removeBtn:hover {
-  background-color: #d32f2f;
-  color: white;
+/* Hidden by default on desktop, shown on mobile */
+.mobileMoveBtn {
+  display: none;
 }
 
-.continueShopping {
-  display: inline-block;
-  padding: 12px 35px;
-  background-color: var(--color-primary);
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+@media (max-width: 1024px) {
+  .wishlistGrid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 1100px) {
+@media (max-width: 768px) {
   .wishlistGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 850px) {
-  .wishlistGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .wishlistGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 2 COLUMNS: Best for mobile images */
     gap: 15px;
   }
-  .title { font-size: 28px; }
+
+  .actionOverlay {
+    display: none; /* Hide hover effect on touch devices */
+  }
+
+  .mobileMoveBtn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .title { font-size: 2.2rem; }
+}
+
+/* Very Small Phones */
+@media (max-width: 400px) {
+  .wishlistGrid { gap: 10px; }
+  .container { padding: 0 5px; }
+}
+
+.footer {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.continueLink {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.emptyIcon { font-size: 60px; color: #ddd; margin-bottom: 20px; }
+.shopNowBtn {
+  background: var(--color-primary);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 4px;
+  margin-top: 20px;
 }

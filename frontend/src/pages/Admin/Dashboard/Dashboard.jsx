@@ -1,24 +1,40 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { formatPrice } from '../../../utils/formatters.js';
-import Loader from '../../../components/Loader/Loader.jsx';
+import { motion } from 'framer-motion';
+import api from "../../../utils/api";
+import { formatPrice, formatDate } from '../../../utils/formatters.js';
 import styles from './Dashboard.module.css';
 
+const StatCard = ({ icon, label, value }) => (
+  <motion.div className={styles.statCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+    <div className={styles.statHeader}><span className={styles.statIcon}>{icon}</span></div>
+    <p className={styles.statLabel}>{label}</p>
+    <p className={styles.statValue}>{value}</p>
+  </motion.div>
+);
+
 export default function Dashboard() {
-  const [stats, setStats] = useState({ totalOrders: 0, totalCustomers: 0, totalProducts: 0 });
   const [recentOrders, setRecentOrders] = useState([]);
+  const [stats, setStats] = useState({ orders: 0, products: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch real-time stats and orders from your MongoDB
-        const [statsRes, ordersRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/admin/stats'),
-          axios.get('http://localhost:5000/api/orders')
+        setIsLoading(true);
+        const [ordersRes, productsRes] = await Promise.all([
+          api.get('/orders?dashboard=true'),
+          api.get('/products')
         ]);
-        setStats(statsRes.data);
-        setRecentOrders(ordersRes.data.slice(0, 5)); // Only show latest 5
+
+        if (ordersRes.data && ordersRes.data.orders) {
+          setRecentOrders(ordersRes.data.orders);
+          setStats(prev => ({ ...prev, orders: ordersRes.data.totalOrders || 0 }));
+        }
+
+        if (productsRes.data) {
+          const pCount = productsRes.data.totalProducts || (Array.isArray(productsRes.data) ? productsRes.data.length : 0);
+          setStats(prev => ({ ...prev, products: pCount }));
+        }
       } catch (err) {
         console.error("Dashboard error:", err);
       } finally {
@@ -28,80 +44,47 @@ export default function Dashboard() {
     fetchDashboardData();
   }, []);
 
-  if (isLoading) return <Loader fullPage />;
-
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Dashboard Overview</h1>
-        <p className={styles.subtitle}>Welcome back, here is what's happening today.</p>
-      </header>
+    <div className={styles.dashboard}>
+      <h1 className={styles.title}>Dashboard</h1>
 
-      {/* STAT CARDS */}
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={`${styles.iconBox} ${styles.ordersIcon}`}>📦</div>
-          <div className={styles.statInfo}>
-            <span className={styles.statLabel}>TOTAL ORDERS</span>
-            <h2 className={styles.statNumber}>{stats.totalOrders}</h2>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={`${styles.iconBox} ${styles.customersIcon}`}>👥</div>
-          <div className={styles.statInfo}>
-            <span className={styles.statLabel}>TOTAL CUSTOMERS</span>
-            <h2 className={styles.statNumber}>{stats.totalCustomers}</h2>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={`${styles.iconBox} ${styles.productsIcon}`}>📍</div>
-          <div className={styles.statInfo}>
-            <span className={styles.statLabel}>TOTAL PRODUCTS</span>
-            <h2 className={styles.statNumber}>{stats.totalProducts}</h2>
-          </div>
-        </div>
+        <StatCard icon="📦" label="Total Orders" value={stats.orders} />
+        <StatCard icon="📍" label="Total Products" value={stats.products} />
       </div>
 
-      {/* RECENT ORDERS TABLE */}
-      <div className={styles.recentSection}>
-        <h2 className={styles.sectionTitle}>Recent Orders</h2>
-        <div className={styles.tableContainer}>
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Recent Activity</h2>
+        <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>ORDER ID</th>
-                <th>CUSTOMER</th>
-                <th>DATE</th>
-                <th>AMOUNT</th>
-                <th>STATUS</th>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
-              {recentOrders.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className={styles.noData}>
-                    No orders placed yet.
-                  </td>
-                </tr>
-              ) : (
+              {isLoading ? (
+                <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#999' }}>Loading...</td></tr>
+              ) : recentOrders.length > 0 ? (
                 recentOrders.map((order) => (
                   <tr key={order._id}>
-                    <td className={styles.idCell}>{order.orderNumber}</td>
-                    <td>
-                      <div className={styles.customerName}>{order.customer.name}</div>
-                      <div className={styles.customerEmail}>{order.customer.email}</div>
+                    {/* ADDED data-label here for the Mobile CSS to pick up */}
+                    <td data-label="Order ID" className={styles.orderId}>{order.orderNumber}</td>
+                    <td data-label="Customer">
+                      <div className={styles.custCol}>
+                        <span className={styles.custName}>{order.customer?.name || 'Guest'}</span>
+                        <small className={styles.custEmail}>{order.customer?.email}</small>
+                      </div>
                     </td>
-                    <td>{new Date(order.createdAt).toLocaleDateString('en-IN')}</td>
-                    <td className={styles.amountCell}>{formatPrice(order.totalAmount)}</td>
-                    <td>
-                      <span className={`${styles.statusBadge} ${styles[order.orderStatus.toLowerCase()]}`}>
-                        {order.orderStatus}
-                      </span>
-                    </td>
+                    <td data-label="Date">{formatDate(order.createdAt)}</td>
+                    <td data-label="Amount" className={styles.amount}>{formatPrice(order.totalAmount)}</td>
                   </tr>
                 ))
+              ) : (
+                <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#999' }}>No recent orders.</td></tr>
               )}
             </tbody>
           </table>

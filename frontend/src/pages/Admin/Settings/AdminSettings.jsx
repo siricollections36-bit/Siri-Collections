@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../../../utils/api'; 
 import { useToast } from '../../../context/ToastContext.jsx';
 import Loader from '../../../components/Loader/Loader.jsx';
 import styles from './AdminSettings.module.css';
 
-const API_URL = 'http://localhost:5000/api/admin/settings';
 
 export default function AdminSettings() {
   const { show } = useToast();
@@ -28,7 +27,7 @@ export default function AdminSettings() {
 
   const fetchSettings = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await api.get('/admin/settings');
       if (res.data) setFormData(res.data);
     } catch (err) {
       console.error("Fetch failed", err);
@@ -46,7 +45,7 @@ export default function AdminSettings() {
     e.preventDefault();
     setIsSaving(true);
     try {
-      const res = await axios.put(API_URL, formData);
+      const res = await api.put('/admin/settings', formData);
       setFormData(res.data);
       setIsEditing(false);
       show('Settings updated successfully!', 'success');
