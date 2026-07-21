@@ -186,3 +186,14 @@
   .title { font-size: 28px; }
   .topNavigation { margin-bottom: 15px; }
 }
+/* Styling for when the item is already in the bag */
+.addToCartBtn.added {
+  background-color: #123325; /* A slightly darker green */
+  cursor: default;
+}
+
+/* Optional: change the hover effect when it's already added */
+.addToCartBtn.added:hover {
+  transform: none;
+  background-color: #123325;
+}
