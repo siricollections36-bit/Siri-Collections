@@ -236,7 +236,7 @@ if (!orderData.razorpayOrderId) {
 
             <div className={styles.divider} />
             <div className={styles.calcRow}><span>Subtotal</span><span>{formatPrice(displaySubtotal)}</span></div>
-            <div className={styles.calcRow}><span>Shipping</span><span>{displayShipping === 0 ? 'FREE' : formatPrice(displayShipping)}</span></div>
+            <div className={styles.calcRow}><span>Shipping</span><span>{formatPrice(displayShipping)}</span></div>
             <div className={styles.divider} />
             <div className={`${styles.calcRow} ${styles.grandTotal}`}>
               <span>Total to Pay</span>
