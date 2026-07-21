@@ -52,6 +52,7 @@ export default function ProductDetails() {
   };
 
   const handleAddToCart = () => {
+    if (quantity === 0) return show("Please select at least 1 item", "error"); // Added this line
     if (!product || product.stock <= 0) {
       show("Sorry, this item is currently out of stock", "error");
       return;
@@ -60,12 +61,7 @@ export default function ProductDetails() {
       show(`Only ${product.stock} items available in stock`, "error");
       return;
     }
-    addToCart({
-      ...product,
-      id: product._id, 
-      quantity: quantity,
-      stock: product.stock 
-    });
+    addToCart(product, quantity);
     show(`${product.name} added to bag`, "success");
   };
 
@@ -144,7 +140,7 @@ export default function ProductDetails() {
 
           <div className={styles.actionRow}>
             <div className={styles.quantitySelector}>
-              <button onClick={() => setQuantity(q => Math.max(1, q - 1))} disabled={quantity <= 1}>−</button>
+<button onClick={() => setQuantity(q => Math.max(0, q - 1))}>−</button>
               <span>{quantity}</span>
               <button onClick={() => setQuantity(q => q + 1)} disabled={quantity >= product.stock}>+</button>
             </div>
