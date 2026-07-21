@@ -80,7 +80,7 @@ export function CartProvider({ children }) {
   const { cartSubtotal, shippingFee, cartTotal, cartCount } = useMemo(() => {
     const subtotal = items.reduce((sum, i) => sum + (Number(i.price) * i.quantity), 0);
     const count = items.reduce((sum, i) => sum + i.quantity, 0);
-    const fee = (subtotal === 0 || subtotal >= 999) ? 0 : 120;
+    const fee = subtotal === 0 ? 0 : 120;
     return { cartSubtotal: subtotal, shippingFee: fee, cartTotal: subtotal + fee, cartCount: count };
   }, [items]);
 
