@@ -69,63 +69,39 @@
 }
 
 /* --- DESKTOP HOVER OVERLAY --- */
-.actionOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(5, 71, 42, 0.7); /* SIRI GREEN tint */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: 0.3s ease;
-  z-index: 5;
-}
 
-.wishlistItem:hover .actionOverlay {
-  opacity: 1;
-}
 
-.moveToCartBtn {
-  background: white;
-  color: var(--color-primary);
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-weight: 700;
-  cursor: pointer;
-  transform: translateY(15px);
-  transition: 0.3s ease;
-}
 
-.wishlistItem:hover .moveToCartBtn {
-  transform: translateY(0);
-}
+
 
 /* --- REMOVE BUTTON --- */
 .removeBtn {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   background: white;
+  border: 1px solid #eee;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   z-index: 10;
+  color: #333;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.removeBtn:hover {
+  background: #fdf2f2;
   color: #d32f2f;
-  font-size: 14px;
+  border-color: #ffcdd2;
+  transform: scale(1.1);
 }
 
 /* Hidden by default on desktop, shown on mobile */
-.mobileMoveBtn {
-  display: none;
-}
 
 /* --- RESPONSIVE BREAKPOINTS --- */
 
@@ -138,22 +114,9 @@
     grid-template-columns: repeat(2, 1fr); /* 2 COLUMNS: Best for mobile images */
     gap: 15px;
   }
+  
 
-  .actionOverlay {
-    display: none; /* Hide hover effect on touch devices */
-  }
-
-  .mobileMoveBtn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: var(--color-primary);
-    color: white;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    border-radius: 0 0 8px 8px;
-  }
+  
 
   .title { font-size: 2.2rem; }
 }
