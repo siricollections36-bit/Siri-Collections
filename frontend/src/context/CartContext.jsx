@@ -65,8 +65,12 @@ export function CartProvider({ children }) {
     });
   };
 
-  const updateQuantity = (pId, newQty) => {
-    setItems((prev) => prev.map((i) => ((i._id || i.id) === pId ? { ...i, quantity: Math.max(1, newQty) } : i)));
+ const updateQuantity = (pId, newQty) => {
+    if (newQty < 1) {
+      removeFromCart(pId);
+      return;
+    }
+    setItems((prev) => prev.map((i) => ((i._id || i.id) === pId ? { ...i, quantity: newQty } : i)));
   };
 
   const removeFromCart = (pId) => setItems((prev) => prev.filter((i) => (i._id || i.id) !== pId));
