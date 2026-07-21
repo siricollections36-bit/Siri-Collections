@@ -15,7 +15,8 @@ const app = express();
 // Enable CORS for frontend communication
 app.use(cors({
   origin: [
-    'http://localhost:5173',          // Your local test site
+        'https://siri-collections-frontend.onrender.com',
+        'http://localhost:5173',          // Your local test site
     'https://shopsiricollections.com',    // Your future .com
     'https://www.shopsiricollections.com' // Your future .com with www
   ],
