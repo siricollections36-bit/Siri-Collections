@@ -10,7 +10,7 @@ import styles from './ProductDetails.module.css';
 export default function ProductDetails() {
   const { slug } = useParams(); 
   const navigate = useNavigate(); 
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const { show } = useToast();
   
   const [product, setProduct] = useState(null);
@@ -150,7 +150,12 @@ export default function ProductDetails() {
               onClick={handleAddToCart}
               disabled={product.stock <= 0}
             >
-              {product.stock > 0 ? 'ADD TO BAG' : 'OUT OF STOCK'}
+              {product.stock <= 0 
+    ? 'OUT OF STOCK' 
+    : isInCart(product._id) 
+      ? 'ADDED ✓' 
+      : 'ADD TO BAG'
+  }
             </button>
           </div>
 
