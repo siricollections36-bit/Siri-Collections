@@ -10,7 +10,7 @@ import styles from './ProductDetails.module.css';
 export default function ProductDetails() {
   const { slug } = useParams(); 
   const navigate = useNavigate(); 
-  const { addToCart, isInCart } = useCart();
+  const { addToCart, items, updateQuantity, isInCart } = useCart();
   const { show } = useToast();
   
   const [product, setProduct] = useState(null);
@@ -18,7 +18,14 @@ export default function ProductDetails() {
   const [activeImg, setActiveImg] = useState(0); 
   const [quantity, setQuantity] = useState(1);
   const [isDescOpen, setIsDescOpen] = useState(false);
+// Helper to find the current item in the bag
+  const cartItem = items.find(i => (i._id || i.id) === product?._id);
 
+  const handleQtyChange = (delta) => {
+    const currentQty = cartItem?.quantity || 0;
+    updateQuantity(product._id, currentQty + delta);
+  };
+  
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -52,16 +59,12 @@ export default function ProductDetails() {
   };
 
   const handleAddToCart = () => {
-    if (quantity === 0) return show("Please select at least 1 item", "error"); // Added this line
     if (!product || product.stock <= 0) {
       show("Sorry, this item is currently out of stock", "error");
       return;
     }
-    if (quantity > product.stock) {
-      show(`Only ${product.stock} items available in stock`, "error");
-      return;
-    }
-    addToCart(product, quantity);
+    // Adds initial 1 quantity
+    addToCart(product, 1);
     show(`${product.name} added to bag`, "success");
   };
 
@@ -139,24 +142,29 @@ export default function ProductDetails() {
           </div>
 
           <div className={styles.actionRow}>
-            <div className={styles.quantitySelector}>
-<button onClick={() => setQuantity(q => Math.max(0, q - 1))}>−</button>
-              <span>{quantity}</span>
-              <button onClick={() => setQuantity(q => q + 1)} disabled={quantity >= product.stock}>+</button>
-            </div>
-
-            <button 
-              className={styles.addToCartBtn} 
-              onClick={handleAddToCart}
-              disabled={product.stock <= 0}
-            >
-              {product.stock <= 0 
-    ? 'OUT OF STOCK' 
-    : isInCart(product._id) 
-      ? 'ADDED ✓' 
-      : 'ADD TO BAG'
-  }
-            </button>
+            {isInCart(product._id) && product.stock > 0 ? (
+              /* If item is already in bag, show the - Qty + selector */
+              <div className={styles.qtySelectorFull}>
+                <button type="button" className={styles.qtyBtn} onClick={() => handleQtyChange(-1)}>−</button>
+                <span className={styles.qtyVal}>{cartItem.quantity}</span>
+                <button 
+                  type="button" 
+                  className={styles.qtyBtn} 
+                  onClick={() => handleQtyChange(1)}
+                  disabled={cartItem.quantity >= product.stock}
+                >+</button>
+              </div>
+            ) : (
+              /* Initial state: Show the Add to Bag button */
+              <button 
+                type="button"
+                className={styles.addToCartBtn} 
+                onClick={handleAddToCart}
+                disabled={product.stock <= 0}
+              >
+                {product.stock > 0 ? 'ADD TO BAG' : 'OUT OF STOCK'}
+              </button>
+            )}
           </div>
 
           <div className={styles.dropdownSection}>
