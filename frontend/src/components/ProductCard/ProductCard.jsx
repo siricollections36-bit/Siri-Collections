@@ -9,22 +9,31 @@ import styles from './ProductCard.module.css';
 
 export default function ProductCard({ product }) {
   const [hovered, setHovered] = useState(false);
-  const { addToCart, isInCart } = useCart();
+const { addToCart, items, updateQuantity, isInCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
   const { show } = useToast();
 
   // MongoDB uses _id. We pass the whole product but ensure ID logic uses _id
   const productId = product._id; 
+  // Find this specific item in the cart to get its current quantity
+  const cartItem = items.find(i => (i._id || i.id) === productId);
 
-  const handleAddToCart = (e) => {
-    e.preventDefault(); // Prevents navigating to product page
+  const handleQtyChange = (e, delta) => {
+    e.preventDefault();
     e.stopPropagation();
-    
-    // Add to cart logic
-    addToCart({ ...product, id: productId }); 
-    show(`${product.name} added to cart`, 'success');
+    const currentQty = cartItem?.quantity || 0;
+    const newQty = currentQty + delta;
+    updateQuantity(productId, newQty);
   };
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.availability === 'Out of Stock') return;
+    
+    addToCart(product, 1); 
+    show(`${product.name} added to bag`, 'success');
+  };
   const handleWishlist = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -91,14 +100,28 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* ADD TO CART BUTTON */}
-        <button
-          className={`${styles.addBtn} ${isInCart(productId) ? styles.inCart : ''}`}
-          onClick={handleAddToCart}
-          disabled={product.availability === 'Out of Stock'}
-        >
-          {isInCart(productId) ? 'ADDED ✓' : 'ADD TO CART'}
-        </button>
-      </div>
+       <div className={styles.buttonWrapper}>
+          {isInCart(productId) ? (
+            <div className={styles.qtySelector}>
+              <button className={styles.qtyBtn} onClick={(e) => handleQtyChange(e, -1)}>−</button>
+              <span className={styles.qtyValue}>{cartItem?.quantity}</span>
+              <button 
+                className={styles.qtyBtn} 
+                onClick={(e) => handleQtyChange(e, 1)}
+                disabled={cartItem?.quantity >= product.stock}
+              >+</button>
+            </div>
+          ) : (
+            <button
+              className={styles.addBtn}
+              onClick={handleAddToCart}
+              disabled={product.availability === 'Out of Stock' || product.stock <= 0}
+            >
+              {product.availability === 'Out of Stock' ? 'OUT OF STOCK' : 'ADD TO BAG'}
+            </button>
+          )}
+        </div>
+      
     </motion.div>
   );
 }
