@@ -8,7 +8,7 @@ import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
 import styles from './Navbar.module.css';
 
-const LOGO_URL = '/src/assets/logos/{B39839BA-3DDD-44D0-A6FC-AEACFFCE1712}.png';
+<img src={logo} alt="Siri Collections" />
 
 export default function Navbar() {
   const { isScrolled } = useScrollPosition();
