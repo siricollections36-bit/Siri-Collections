@@ -170,7 +170,7 @@ export default function ProductDetails() {
             {isDescOpen && (
               <div className={styles.dropdownContent}>
                 <p className={styles.description}>
-                  {product.description || "Experience timeless elegance with this handcrafted piece from Siri Textiles."}
+                  {product.description || "Experience timeless elegance with this handcrafted piece from Siri Collections."}
                 </p>
               </div>
             )}
