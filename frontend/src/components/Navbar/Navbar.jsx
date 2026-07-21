@@ -9,8 +9,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import styles from './Navbar.module.css';
 import logo from '../../assets/logos/logo.png';
 
-<img src={logo} alt="Siri Collections" />
-
+const LOGO_URL = logo;
 export default function Navbar() {
   const { isScrolled } = useScrollPosition();
   const location = useLocation();
