@@ -192,8 +192,8 @@ export default function Cart() {
                 <span>{formatPrice(cartSubtotal)}</span>
               </div>
               <div className={styles.breakdownRow}>
-                <span>Shipping</span>
-                {shippingFee === 0 ? <span className={styles.freeShipping}>FREE</span> : <span>{formatPrice(shippingFee)}</span>}
+                  <span>Shipping</span>
+                  <span>{formatPrice(shippingFee)}</span>
               </div>
               <div className={styles.breakdownDivider} />
               <div className={`${styles.breakdownRow} ${styles.total}`}>
